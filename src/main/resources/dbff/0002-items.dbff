@@ -1,0 +1,1 @@
+create table "items" ("id" INTEGER PRIMARY KEY AUTOINCREMENT,"lancamento_id" INTEGER NOT NULL,"produto" VARCHAR(254) NOT NULL,"valor" DECIMAL(21,2) NOT NULL)

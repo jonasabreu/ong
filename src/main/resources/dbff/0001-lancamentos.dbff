@@ -1,0 +1,1 @@
+create table "lancamentos" ("id" INTEGER PRIMARY KEY AUTOINCREMENT)
