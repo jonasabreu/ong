@@ -17,7 +17,7 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
 
   @Post(Array("/novo"))
   def postaNovo(lancamento : Lancamento) = {
-    lancamentos.add(Lancamento(0, lancamento.nonEmptyItems))
+    lancamentos.add(lancamento.copy(items = lancamento.nonEmptyItems))
     result.redirectTo(classOf[Caixa]).novo
   }
 }

@@ -1,1 +1,1 @@
-create table "lancamentos" ("id" INTEGER PRIMARY KEY AUTOINCREMENT)
+create table "lancamentos" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "formaPagamento" CHAR(8) NOT NULL)

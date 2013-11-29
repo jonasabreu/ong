@@ -18,7 +18,7 @@ class Lancamentos {
   import Database._
 
   def add(lancamento : Lancamento) = onDatabase {
-    val id = Lancamentos.autoInc.insert(None)
+    val id = Lancamentos.autoInc.insert(None, lancamento.formaPagamento.toString())
     Items.autoInc.insertAll(
       lancamento.items.asScala.
         map(_.copy(lancamentoId = id)).
@@ -31,39 +31,28 @@ class Lancamentos {
   def todos : Seq[Lancamento] = onDatabase {
     val query = for {
       lancamento <- Lancamentos
-    } yield lancamento.id
+    } yield (lancamento.id, lancamento.formaPagamento)
 
-    query.list.map { id =>
-      val query = for {
-        item <- Items if item.lancamentoId === id
-      } yield item.*
+    query.list.map {
+      case (id, formaPagamento) =>
+        val query = for {
+          item <- Items if item.lancamentoId === id
+        } yield item.*
 
-      val items = query.list.map { t =>
-        Item(t._1, t._2, t._3, t._4.bigDecimal)
-      }
-      Lancamento(id, items.toList.asJava)
+        val items = query.list.map { t =>
+          Item(t._1, t._2, t._3, t._4.bigDecimal)
+        }
+        Lancamento(id, FormaPagamento.valueOf(formaPagamento), items.toList.asJava)
     }
-
   }
-
 }
 
-case class Lancamento(id : Long, items : JList[Item]) {
-  def getItems = items
-  def nonEmptyItems = items.asScala.filterNot(_.empty).asJava
-}
-
-case class Item(id : Long, lancamentoId : Long, produto : String, valor : java.math.BigDecimal) {
-  def getProduto = produto
-  def getValor = valor
-  def empty = produto == "" || valor == null
-}
-
-object Lancamentos extends Table[(Long)]("lancamentos") {
+object Lancamentos extends Table[(Long, String)]("lancamentos") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  def * = id
+  def formaPagamento = column[String]("formaPagamento")
+  def * = id ~ formaPagamento
   def items = Items.where(_.lancamentoId === id)
-  def autoInc = id.? returning id
+  def autoInc = id.? ~ formaPagamento returning id
 }
 
 object Items extends Table[(Long, Long, String, BigDecimal)]("items") {

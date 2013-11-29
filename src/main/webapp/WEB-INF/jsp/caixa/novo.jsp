@@ -24,6 +24,11 @@
 	<input type="hidden" name="lancamento.items[4].lancamentoId" value="0" />
 	<input name="lancamento.items[4].produto" />
 	<input name="lancamento.items[4].valor" /><br>
+	<select name="lancamento.formaPagamento">
+		<option value="dinheiro">Dinheiro</option>
+		<option value="debito">Débito</option>
+		<option value="credito">Crédito</option>
+	</select>
 	<input type="submit" />
 </form> 
 
