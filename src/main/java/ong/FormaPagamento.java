@@ -1,7 +1,7 @@
 package ong;
 
 public enum FormaPagamento {
-	dinheiro("Dinheiro"), credito("Crédito"), debito("Débito");
+	dinheiro("Dinheiro"), credito("Cr&eacute;dito"), debito("D&eacute;bito");
 
 	private final String rep;
 

@@ -1,6 +1,10 @@
+<!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
-<head><title></title></head>
+<head>
+	<title></title>
+	<meta charset="utf-8"> 
+</head>
 	<link rel="stylesheet" href="/css/style.css" />
 <body>
 <form action="/novo" method="post">
@@ -27,13 +31,19 @@
 	<input name="lancamento.items[4].valor" /><br>
 	<select name="lancamento.formaPagamento">
 		<option value="dinheiro">Dinheiro</option>
-		<option value="debito">Débito</option>
-		<option value="credito">Crédito</option>
+		<option value="debito">D&eacute;bito</option>
+		<option value="credito">Cr&eacute;dito</option>
 	</select>
 	<input type="submit" />
 </form> 
-
 <ul>
+
+<ul class="total">
+	<li class="dinheiro">Total em Dinheiro: ${totalDinheiro}</li>
+	<li class="debito">Total em D&eacute;bito: ${totalDebito}</li>
+	<li class="credito">Total em Cr&eacute;dito: ${totalCredito}</li>
+</ul>
+
 <c:forEach items="${lancamentos}" var="lancamento">
 <li class="${lancamento.formaPagamento}"> Pago em ${lancamento.formaPagamento.rep}
 	<ul>

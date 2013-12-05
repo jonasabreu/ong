@@ -2,6 +2,7 @@ package ong
 
 import java.util.{ List => JList }
 import scala.collection.JavaConverters._
+import java.sql.Date
 
 case class Lancamento(id : Long, formaPagamento : FormaPagamento, items : JList[Item]) {
   def getItems = items

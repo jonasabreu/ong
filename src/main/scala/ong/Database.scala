@@ -10,6 +10,7 @@ import scala.slick.session.{ Database => SQDB }
 import scala.slick.driver.SQLiteDriver.simple._
 import scala.slick.session.Database.threadLocalSession
 import math.BigDecimal._
+import java.sql.Date
 
 @Component
 @RequestScoped
@@ -18,8 +19,8 @@ class Lancamentos {
   import Database._
 
   def add(lancamento : Lancamento) = onDatabase {
-    val id = Lancamentos.autoInc.insert(None, lancamento.formaPagamento.toString())
-    Items.autoInc.insertAll(
+    val id = Lancamentos.insertProj.insert(None, lancamento.formaPagamento.toString())
+    Items.insertProj.insertAll(
       lancamento.items.asScala.
         map(_.copy(lancamentoId = id)).
         map(Item.unapply(_).get).
@@ -31,10 +32,10 @@ class Lancamentos {
   def todos : Seq[Lancamento] = onDatabase {
     val query = for {
       lancamento <- Lancamentos
-    } yield (lancamento.id, lancamento.formaPagamento)
+    } yield lancamento.*
 
-    query.list.map {
-      case (id, formaPagamento) =>
+    query.list.reverse.map {
+      case (id, formaPagamento, date) =>
         val query = for {
           item <- Items if item.lancamentoId === id
         } yield item.*
@@ -47,12 +48,13 @@ class Lancamentos {
   }
 }
 
-object Lancamentos extends Table[(Long, String)]("lancamentos") {
+object Lancamentos extends Table[(Long, String, Date)]("lancamentos") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def formaPagamento = column[String]("formaPagamento")
-  def * = id ~ formaPagamento
+  def createdAt = column[Date]("createdAt")
+  def * = id ~ formaPagamento ~ createdAt
   def items = Items.where(_.lancamentoId === id)
-  def autoInc = id.? ~ formaPagamento returning id
+  def insertProj = id.? ~ formaPagamento returning id
 }
 
 object Items extends Table[(Long, Long, String, BigDecimal)]("items") {
@@ -61,7 +63,7 @@ object Items extends Table[(Long, Long, String, BigDecimal)]("items") {
   def produto = column[String]("produto")
   def valor = column[BigDecimal]("valor")
   def * = id ~ lancamentoId ~ produto ~ valor
-  def autoInc = id.? ~ lancamentoId ~ produto ~ valor
+  def insertProj = id.? ~ lancamentoId ~ produto ~ valor
 }
 
 object Database {
