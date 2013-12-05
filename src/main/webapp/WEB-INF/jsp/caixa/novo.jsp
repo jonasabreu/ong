@@ -35,7 +35,7 @@
 
 <ul>
 <c:forEach items="${lancamentos}" var="lancamento">
-<li class="${lancamento.formaPagamento}">
+<li class="${lancamento.formaPagamento}"> Pago em ${lancamento.formaPagamento.rep}
 	<ul>
 	<c:forEach items="${lancamento.items}" var="item">
 		<li>${item.produto} - ${item.valor}</li>
