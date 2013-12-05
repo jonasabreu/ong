@@ -6,6 +6,8 @@ import java.math.BigDecimal
 import scala.collection.mutable.ListBuffer
 import br.com.caelum.vraptor.ioc.Component
 import br.com.caelum.vraptor.ioc.RequestScoped
+import java.util.{ List => JList }
+import ong.FormaPagamento._
 
 @Resource
 class Caixa(result : Result, lancamentos : Lancamentos) {
@@ -17,22 +19,24 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
     val todosLancamentos = lancamentos.todos
 
     result.include("lancamentos", todosLancamentos.asJava)
-    result.include("totalDebito", sumOf(FormaPagamento.debito, todosLancamentos))
-    result.include("totalDinheiro", sumOf(FormaPagamento.dinheiro, todosLancamentos))
-    result.include("totalCredito", sumOf(FormaPagamento.credito, todosLancamentos))
+    result.include("totalDebito", sumOf(debito, todosLancamentos))
+    result.include("totalDinheiro", sumOf(dinheiro, todosLancamentos))
+    result.include("totalCredito", sumOf(credito, todosLancamentos))
   }
 
   @Post(Array("/novo"))
-  def postaNovo(lancamento : Lancamento) = {
-    lancamentos.add(lancamento.copy(items = lancamento.nonEmptyItems))
+  def postaNovo(formaPagamento : FormaPagamento, items : JList[PartialItem]) = {
+    lancamentos.add(formaPagamento, items.asScala.filterNot(_.empty))
     result.redirectTo(classOf[Caixa]).novo
   }
+}
+
+case class PartialItem(produto : String, valor : BigDecimal) {
+  def empty = produto == "" || valor == null
 }
 
 object Caixa {
   def sumOf(forma : FormaPagamento, lancamentos : Seq[Lancamento]) =
     lancamentos.filter(_.formaPagamento == forma).
-      map(_.getItems.asScala.map(_.valor).foldLeft(new BigDecimal("0"))(_.add(_))).
-      foldLeft(new BigDecimal("0"))(_.add(_))
-
+      map(_.items.map(_.valor).sum).sum
 }

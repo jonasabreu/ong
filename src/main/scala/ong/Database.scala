@@ -2,15 +2,14 @@ package ong
 
 import java.util.{ List => JList }
 import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
 import br.com.caelum.vraptor.ioc.Component
 import br.com.caelum.vraptor.ioc.RequestScoped
 import scala.collection.mutable.ListBuffer
 import scala.slick.session.{ Database => SQDB }
 import scala.slick.driver.SQLiteDriver.simple._
 import scala.slick.session.Database.threadLocalSession
-import math.BigDecimal._
 import java.sql.Date
+import java.sql.Timestamp
 
 @Component
 @RequestScoped
@@ -18,15 +17,13 @@ class Lancamentos {
 
   import Database._
 
-  def add(lancamento : Lancamento) = onDatabase {
-    val id = Lancamentos.insertProj.insert(None, lancamento.formaPagamento.toString())
+  def add(formaPagamento : FormaPagamento, items : Seq[PartialItem]) = onDatabase {
+    val id = Lancamentos.insertProj.insert((None, formaPagamento.toString))
+
     Items.insertProj.insertAll(
-      lancamento.items.asScala.
-        map(_.copy(lancamentoId = id)).
-        map(Item.unapply(_).get).
-        map {
-          case (a, b, c, d) => (None, b, c, javaBigDecimal2bigDecimal(d))
-        } : _*)
+      items.map {
+        case PartialItem(produto, valor) => (None, id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor))
+      } : _*)
   }
 
   def todos : Seq[Lancamento] = onDatabase {
@@ -41,9 +38,9 @@ class Lancamentos {
         } yield item.*
 
         val items = query.list.map { t =>
-          Item(t._1, t._2, t._3, t._4.bigDecimal)
+          Item(t._1, t._2, t._3, t._4)
         }
-        Lancamento(id, FormaPagamento.valueOf(formaPagamento), items.toList.asJava)
+        Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, items)
     }
   }
 }
