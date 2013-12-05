@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head><title></title></head>
+	<link rel="stylesheet" href="/css/style.css" />
 <body>
 <form action="/novo" method="post">
 	<input type="hidden" name="lancamento.id" value="0" />
@@ -34,7 +35,7 @@
 
 <ul>
 <c:forEach items="${lancamentos}" var="lancamento">
-<li>
+<li class="${lancamento.formaPagamento}">
 	<ul>
 	<c:forEach items="${lancamento.items}" var="item">
 		<li>${item.produto} - ${item.valor}</li>
