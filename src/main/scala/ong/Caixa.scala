@@ -8,6 +8,7 @@ import br.com.caelum.vraptor.ioc.Component
 import br.com.caelum.vraptor.ioc.RequestScoped
 import java.util.{ List => JList }
 import ong.FormaPagamento._
+import java.text.DecimalFormat
 
 @Resource
 class Caixa(result : Result, lancamentos : Lancamentos) {
@@ -17,11 +18,12 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
   @Get(Array("/"))
   def novo() = {
     val lancamentos = this.lancamentos.hoje
+    val format = new DecimalFormat("'R$ '0.00")
 
     result.include("lancamentos", lancamentos.asJava)
-    result.include("totalDebito", sumOf(debito, lancamentos))
-    result.include("totalDinheiro", sumOf(dinheiro, lancamentos))
-    result.include("totalCredito", sumOf(credito, lancamentos))
+    result.include("totalDebito", format.format(sumOf(debito, lancamentos)))
+    result.include("totalDinheiro", format.format(sumOf(dinheiro, lancamentos)))
+    result.include("totalCredito", format.format(sumOf(credito, lancamentos)))
   }
 
   @Post(Array("/novo"))
