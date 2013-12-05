@@ -14,7 +14,7 @@ case class Lancamento(id : Long, formaPagamento : FormaPagamento, data : Date, i
 }
 
 case class Item(id : Long, lancamentoId : Long, produto : String, valor : BigDecimal) {
-  private val format = new DecimalFormat("'R$'0.00")
+  private val format = new DecimalFormat("'R$ '0.00")
   def getProduto = produto
   def getValor = format.format(valor.bigDecimal)
 }
