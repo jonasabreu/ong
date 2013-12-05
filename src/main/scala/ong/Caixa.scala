@@ -16,12 +16,12 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
 
   @Get(Array("/"))
   def novo() = {
-    val todosLancamentos = lancamentos.todos
+    val lancamentos = this.lancamentos.hoje
 
-    result.include("lancamentos", todosLancamentos.asJava)
-    result.include("totalDebito", sumOf(debito, todosLancamentos))
-    result.include("totalDinheiro", sumOf(dinheiro, todosLancamentos))
-    result.include("totalCredito", sumOf(credito, todosLancamentos))
+    result.include("lancamentos", lancamentos.asJava)
+    result.include("totalDebito", sumOf(debito, lancamentos))
+    result.include("totalDinheiro", sumOf(dinheiro, lancamentos))
+    result.include("totalCredito", sumOf(credito, lancamentos))
   }
 
   @Post(Array("/novo"))

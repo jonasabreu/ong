@@ -10,6 +10,7 @@ import scala.slick.driver.SQLiteDriver.simple._
 import scala.slick.session.Database.threadLocalSession
 import java.sql.Date
 import java.sql.Timestamp
+import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
 
 @Component
 @RequestScoped
@@ -26,10 +27,9 @@ class Lancamentos {
       } : _*)
   }
 
-  def todos : Seq[Lancamento] = onDatabase {
-    val query = for {
-      lancamento <- Lancamentos
-    } yield lancamento.*
+  def hoje : Seq[Lancamento] = onDatabase {
+    val query =
+      Q.queryNA[(Long, String, Date)]("select * from lancamentos where date(createdAt) == current_date")
 
     query.list.reverse.map {
       case (id, formaPagamento, date) =>
