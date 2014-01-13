@@ -21,9 +21,9 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
     val format = new DecimalFormat("'R$ '0.00")
 
     result.include("lancamentos", lancamentos.asJava)
-    result.include("totalDebito", format.format(sumOf(debito, lancamentos)))
-    result.include("totalDinheiro", format.format(sumOf(dinheiro, lancamentos)))
-    result.include("totalCredito", format.format(sumOf(credito, lancamentos)))
+    FormaPagamento.values.foreach { forma =>
+      result.include(s"total${forma.toString.capitalize}", format.format(sumOf(forma, lancamentos)))
+    }
   }
 
   @Post(Array("/novo"))

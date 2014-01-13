@@ -26,8 +26,12 @@
 	<input name="items[7].valor" /><br>
 	<select name="formaPagamento">
 		<option value="dinheiro">Dinheiro</option>
-		<option value="debito">D&eacute;bito</option>
-		<option value="credito">Cr&eacute;dito</option>
+		<option value="debito">Debito</option>
+		<option value="credito">Credito</option>
+		<option value="transferencia">Transferencia</option>
+		<option value="deposito">Deposito</option>
+		<option value="pagamentoOnline">Pagamento Online</option>
+		<option value="cheque">Cheque</option>
 	</select>
 	<input type="submit" />
 </form> 
@@ -35,8 +39,12 @@
 
 <ul class="total">
 	<li class="dinheiro">Total em Dinheiro: ${totalDinheiro}</li>
-	<li class="debito">Total em D&eacute;bito: ${totalDebito}</li>
-	<li class="credito">Total em Cr&eacute;dito: ${totalCredito}</li>
+	<li class="debito">Total em Debito: ${totalDebito}</li>
+	<li class="credito">Total em Credito: ${totalCredito}</li>
+	<li>Total em Transferencia: ${totalTransferencia}</li>
+	<li>Total em Deposito: ${totalDeposito}</li>
+	<li>Total em Pagamento Online: ${totalPagamentoOnline}</li>
+	<li>Total em Cheque: ${totalCheque}</li>
 </ul>
 
 <c:forEach items="${lancamentos}" var="lancamento">

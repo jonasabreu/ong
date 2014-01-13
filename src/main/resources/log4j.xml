@@ -10,7 +10,7 @@
         </appender>
 
         <logger name="br.com.caelum">
-                <level value="DEBUG" />
+                <level value="INFO" />
         </logger>
         
         <logger name="ong">
