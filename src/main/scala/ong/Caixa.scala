@@ -20,6 +20,7 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
     val lancamentos = this.lancamentos.hoje
     val format = new DecimalFormat("'R$ '0.00")
 
+    result.include("campos", (0 until 8).asJava)
     result.include("lancamentos", lancamentos.asJava)
     FormaPagamento.values.foreach { forma =>
       result.include(s"total${forma.toString.capitalize}", format.format(sumOf(forma, lancamentos)))

@@ -7,23 +7,13 @@
 </head>
 	<link rel="stylesheet" href="/css/style.css" />
 <body>
-<form action="/novo" method="post">
-	<input name="items[0].produto" /> 
-	<input name="items[0].valor" /><br>
-	<input name="items[1].produto" /> 
-	<input name="items[1].valor" /><br>
-	<input name="items[2].produto" /> 
-	<input name="items[2].valor" /><br>
-	<input name="items[3].produto" /> 
-	<input name="items[3].valor" /><br>
-	<input name="items[4].produto" /> 
-	<input name="items[4].valor" /><br>
-	<input name="items[5].produto" /> 
-	<input name="items[5].valor" /><br>
-	<input name="items[6].produto" /> 
-	<input name="items[6].valor" /><br>
-	<input name="items[7].produto" /> 
-	<input name="items[7].valor" /><br>
+<form id="compra" action="/novo" method="post">
+	<c:forEach var="i" items="${campos}">
+		<input name="items[${i}].produto" /> 
+		<input class="valor" name="items[${i}].valor" pattern="[0-9\.]*" title="Use apenas n&uacute;meros e '.'"/><br>
+	</c:forEach>
+	<label for="total">Total: R$</label>
+	<input name="total" id="total" value="0" /><br>
 	<select name="formaPagamento">
 		<option value="dinheiro">Dinheiro</option>
 		<option value="debito">Debito</option>
@@ -35,7 +25,6 @@
 	</select>
 	<input type="submit" />
 </form> 
-<ul>
 
 <ul class="total">
 	<li class="dinheiro">Total em Dinheiro: ${totalDinheiro}</li>
@@ -56,5 +45,8 @@
 	</ul>
 </li>
 </c:forEach> </ul>
+	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script src="/js/underscore-min.js"></script>
+	<script src="/js/ong.js"></script>
 </body>
 </html>
