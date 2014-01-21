@@ -37,7 +37,7 @@
 </ul>
 
 <c:forEach items="${lancamentos}" var="lancamento">
-<li class="${lancamento.formaPagamento}">${lancamento.hora} - ${lancamento.formaPagamento.rep}
+<li class="${lancamento.formaPagamento}">${lancamento.hora} - ${lancamento.formaPagamento.rep} - <a href="/remove/${lancamento.id}">Remover</a>
 	<ul>
 	<c:forEach items="${lancamento.items}" var="item">
 		<li>${item.produto} - ${item.valor}</li>

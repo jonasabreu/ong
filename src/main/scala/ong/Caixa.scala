@@ -32,6 +32,12 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
     lancamentos.add(formaPagamento, items.asScala.filterNot(_.empty))
     result.redirectTo(classOf[Caixa]).novo
   }
+
+  @Get(Array("/remove/{id}"))
+  def removePagamento(id : Long) = {
+    lancamentos.remove(id)
+    result.redirectTo(classOf[Caixa]).novo
+  }
 }
 
 case class PartialItem(produto : String, valor : BigDecimal) {

@@ -11,6 +11,7 @@ case class Lancamento(id : Long, formaPagamento : FormaPagamento, data : Date, i
   def getItems = items.asJava
   def getFormaPagamento = formaPagamento
   def getHora = format.format(data)
+  def getId = id
 }
 
 case class Item(id : Long, lancamentoId : Long, produto : String, valor : BigDecimal) {

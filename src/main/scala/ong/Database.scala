@@ -27,6 +27,10 @@ class Lancamentos {
       } : _*)
   }
 
+  def remove(id : Long) = onDatabase {
+    Lancamentos.where(_.id === id).delete
+  }
+
   def hoje : Seq[Lancamento] = onDatabase {
     val query =
       Q.queryNA[(Long, String, Date)]("select * from lancamentos where date(createdAt) == current_date")
