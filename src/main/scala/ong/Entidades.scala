@@ -8,10 +8,12 @@ import java.text.DecimalFormat
 
 case class Lancamento(id : Long, formaPagamento : FormaPagamento, data : Date, items : Seq[Item]) {
   private val format = new SimpleDateFormat("HH:mm:ss")
+  private val moneyFormat = new DecimalFormat("'R$ '0.00")
   def getItems = items.asJava
   def getFormaPagamento = formaPagamento
   def getHora = format.format(data)
   def getId = id
+  def getTotal = moneyFormat.format(items.map(_.valor).sum)
 }
 
 case class Item(id : Long, lancamentoId : Long, produto : String, valor : BigDecimal) {
