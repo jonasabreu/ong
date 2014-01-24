@@ -8,6 +8,8 @@
 	<link rel="stylesheet" href="/css/style.css" />
 <body>
 <form id="compra" action="/novo" method="post">
+	<label>Produto</label>
+	<label class="valor">Valor</label>
 	<c:forEach var="i" items="${campos}">
 		<input name="items[${i}].produto" /> 
 		<input class="valor" name="items[${i}].valor" pattern="[-0-9\.]*" title="Use apenas n&uacute;meros e '.'"/><br>
