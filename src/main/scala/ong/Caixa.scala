@@ -18,9 +18,14 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
   @Get(Array("/"))
   def novo() = {
     val lancamentos = this.lancamentos.hoje
+    result.include("campos", (0 until 15).asJava)
+
+    adiciona(lancamentos)
+  }
+
+  private def adiciona(lancamentos : Seq[Lancamento]) = {
     val format = new DecimalFormat("'R$ '0.00")
 
-    result.include("campos", (0 until 15).asJava)
     result.include("lancamentos", lancamentos.asJava)
     FormaPagamento.values.foreach { forma =>
       result.include(s"total${forma.toString.capitalize}", format.format(sumOf(forma, lancamentos)))
@@ -37,6 +42,16 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
   def removePagamento(id : Long) = {
     lancamentos.remove(id)
     result.redirectTo(classOf[Caixa]).novo
+  }
+
+  @Get(Array("/antigos"))
+  def lista = {
+    result.include("dias", lancamentos.dias.asJava)
+  }
+
+  @Get(Array("/antigo/{dia}"))
+  def antigo(dia : String) = {
+    adiciona(lancamentos.doDia(dia))
   }
 }
 

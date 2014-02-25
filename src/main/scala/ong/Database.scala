@@ -11,6 +11,7 @@ import scala.slick.session.Database.threadLocalSession
 import java.sql.Date
 import java.sql.Timestamp
 import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
+import java.text.SimpleDateFormat
 
 @Component
 @RequestScoped
@@ -31,9 +32,21 @@ class Lancamentos {
     Lancamentos.where(_.id === id).delete
   }
 
-  def hoje : Seq[Lancamento] = onDatabase {
+  def dias = onDatabase {
+    val query = for {
+      lancamento <- Lancamentos
+    } yield lancamento.createdAt
+    val formatter = new SimpleDateFormat("yyyy-MM-dd")
+    query.list.map { date =>
+      formatter.format(date)
+    }.sortWith(_ > _).distinct
+  }
+
+  def hoje = doDia(new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()))
+
+  def doDia(date : String) : Seq[Lancamento] = onDatabase {
     val query =
-      Q.queryNA[(Long, String, Date)]("select * from lancamentos where date(createdAt) == current_date")
+      Q.queryNA[(Long, String, Date)](s"select * from lancamentos where date(createdAt) == '${date}'")
 
     query.list.reverse.map {
       case (id, formaPagamento, date) =>
