@@ -29,4 +29,7 @@ select
 from lancamentos l 
 join items i 
     on l.id = i.lancamento_id 
+where
+    strftime('%m', l.createdAt) = '02' and
+    strftime('%Y', l.createdAt) = '2014'
 order by l.createdAt;
