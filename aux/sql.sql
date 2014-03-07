@@ -30,6 +30,5 @@ from lancamentos l
 join items i 
     on l.id = i.lancamento_id 
 where
-    strftime('%m', l.createdAt) = '02' and
-    strftime('%Y', l.createdAt) = '2014'
+    strftime('%Y%m', l.createdAt) = '201402'
 order by l.createdAt;
