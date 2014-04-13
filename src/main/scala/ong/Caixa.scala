@@ -55,7 +55,7 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
   }
 }
 
-case class PartialItem(produto : String, valor : BigDecimal) {
+case class PartialItem(produto : String, valor : BigDecimal, quantidade : Long) {
   def empty = produto == "" || valor == null
 }
 

@@ -24,7 +24,7 @@ class Lancamentos {
 
     Items.insertProj.insertAll(
       items.map {
-        case PartialItem(produto, valor) => (None, id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor))
+        case PartialItem(produto, valor, quantidade) => (None, id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor), quantidade)
       } : _*)
   }
 
@@ -55,7 +55,7 @@ class Lancamentos {
         } yield item.*
 
         val items = query.list.map { t =>
-          Item(t._1, t._2, t._3, t._4)
+          Item(t._1, t._2, t._3, t._4, t._5)
         }
         Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, items)
     }
@@ -71,13 +71,15 @@ object Lancamentos extends Table[(Long, String, Date)]("lancamentos") {
   def insertProj = id.? ~ formaPagamento returning id
 }
 
-object Items extends Table[(Long, Long, String, BigDecimal)]("items") {
+object Items extends Table[(Long, Long, String, BigDecimal, Long)]("items") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def lancamentoId = column[Long]("lancamento_id")
   def produto = column[String]("produto")
   def valor = column[BigDecimal]("valor")
-  def * = id ~ lancamentoId ~ produto ~ valor
-  def insertProj = id.? ~ lancamentoId ~ produto ~ valor
+  def quantidade = column[Long]("quantidade")
+
+  def * = id ~ lancamentoId ~ produto ~ valor ~ quantidade
+  def insertProj = id.? ~ lancamentoId ~ produto ~ valor ~ quantidade
 }
 
 object Database {

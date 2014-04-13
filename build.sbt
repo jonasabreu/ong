@@ -1,3 +1,7 @@
+
+
+resolvers += "asdf" at "http://jasperreports.sourceforge.net/maven2"
+
 organization := "net.vidageek"
 
 name         := "ong"
@@ -10,6 +14,7 @@ scalaVersion := "2.10.3"
 libraryDependencies ++= Seq("junit" % "junit" % "4.10", 
 							"org.specs2" % "specs2_2.10" % "2.2",
 							"br.com.caelum" % "vraptor" % "3.5.3",
+							"br.com.caelum.stella" % "caelum-stella-boleto" % "2.1.0",
 							"log4j" % "log4j" % "1.2.16",
 							"com.typesafe.slick" %% "slick" % "1.0.1",
 							"org.xerial" % "sqlite-jdbc" % "3.7.15-M1",
