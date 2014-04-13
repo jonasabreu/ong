@@ -12,15 +12,12 @@ select
                 ""
         end
     end,
-    case when i.valor > 0 then
-        case l.formaPagamento
-            when "dinheiro" then 
-                i.valor
-            else
-                ""
-        end
+    case when i.valor > 0 and l.formaPagamento <> "debito" and l.formaPagamento <> "credito" then
+	    i.valor
+    else
+        ""
     end,
-    case when i.valor < 0 then
+    case when i.valor < 0 or l.formaPagamento = "pagamentoOnline" then
       abs(i.valor)
     else
       ""
