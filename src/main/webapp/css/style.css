@@ -9,3 +9,25 @@
 input:invalid {
   box-shadow: 0 0 5px 1px red;
 }
+
+input, label {
+	margin-right: 5px;
+}
+
+.quantidade {
+	width: 30px;
+	text-align: right;
+	display: inline-block;
+}
+
+.produto {
+	width: 300px;
+	text-align: left;
+	display: inline-block;
+}
+
+.valor {
+	width: 75px;
+	text-align: right;
+	display: inline-block;
+}

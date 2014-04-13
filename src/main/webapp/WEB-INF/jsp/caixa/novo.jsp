@@ -9,10 +9,13 @@
 <body>
 <a href="/antigos">Lan&ccedil;amentos Antigos</a> <br />
 <form id="compra" action="/novo" method="post">
+	<label class="quantidade">Qtd</label>
+	<label class="produto">Produto</label>
+	<label class="valor">Valor Unidade</label> <br>
 	<c:forEach var="i" items="${campos}">
-		<input name="items[${i}].produto" /> 
+		<input class="quantidade" name="items[${i}].quantidade" pattern="[0-9]+" title="Use apenas n&uacute;meros" value="1" />
+		<input class="produto" name="items[${i}].produto" /> 
 		<input class="valor" name="items[${i}].valor" pattern="[-0-9\.]*" title="Use apenas n&uacute;meros e '.'"/><br>
-		<input name="items[${i}].quantidade" pattern="[0-9]+" title="Use apenas n&uacute;meros" value="1" /><br>
 	</c:forEach>
 	<label for="total">Total: R$</label>
 	<input name="total" id="total" value="0" /><br>
