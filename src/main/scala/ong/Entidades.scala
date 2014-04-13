@@ -13,11 +13,12 @@ case class Lancamento(id : Long, formaPagamento : FormaPagamento, data : Date, i
   def getFormaPagamento = formaPagamento
   def getHora = format.format(data)
   def getId = id
-  def getTotal = moneyFormat.format(items.map(_.valor).sum)
+  def getTotal = moneyFormat.format(items.map(i => i.valor * i.quantidade).sum)
 }
 
 case class Item(id : Long, lancamentoId : Long, produto : String, valor : BigDecimal, quantidade : Long) {
   private val format = new DecimalFormat("'R$ '0.00")
   def getProduto = produto
-  def getValor = format.format(valor.bigDecimal)
+  def getValor = format.format((valor * quantidade).bigDecimal)
+  def getQuantidade = quantidade
 }
