@@ -19,8 +19,8 @@ class Lancamentos {
 
   import Database._
 
-  def add(formaPagamento : FormaPagamento, items : Seq[PartialItem]) = onDatabase {
-    val id = Lancamentos.insertProj.insert((None, formaPagamento.toString))
+  def add(formaPagamento : FormaPagamento, atendente : String, items : Seq[PartialItem]) = onDatabase {
+    val id = Lancamentos.insertProj.insert((None, formaPagamento.toString, atendente))
 
     Items.insertProj.insertAll(
       items.map {
@@ -46,10 +46,10 @@ class Lancamentos {
 
   def doDia(date : String) : Seq[Lancamento] = onDatabase {
     val query =
-      Q.queryNA[(Long, String, Date)](s"select * from lancamentos where date(createdAt) == '${date}'")
+      Q.queryNA[(Long, String, Date, String)](s"select * from lancamentos where date(createdAt) == '${date}'")
 
     query.list.reverse.map {
-      case (id, formaPagamento, date) =>
+      case (id, formaPagamento, date, atendente) =>
         val query = for {
           item <- Items if item.lancamentoId === id
         } yield item.*
@@ -57,18 +57,20 @@ class Lancamentos {
         val items = query.list.map { t =>
           Item(t._1, t._2, t._3, t._4, t._5)
         }
-        Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, items)
+        Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, atendente, items)
     }
   }
 }
 
-object Lancamentos extends Table[(Long, String, Date)]("lancamentos") {
+object Lancamentos extends Table[(Long, String, Date, String)]("lancamentos") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def formaPagamento = column[String]("formaPagamento")
   def createdAt = column[Date]("createdAt")
-  def * = id ~ formaPagamento ~ createdAt
+  def atendente = column[String]("atendente")
+
+  def * = id ~ formaPagamento ~ createdAt ~ atendente
   def items = Items.where(_.lancamentoId === id)
-  def insertProj = id.? ~ formaPagamento returning id
+  def insertProj = id.? ~ formaPagamento ~ atendente returning id
 }
 
 object Items extends Table[(Long, Long, String, BigDecimal, Long)]("items") {

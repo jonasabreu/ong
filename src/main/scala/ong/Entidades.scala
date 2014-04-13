@@ -6,7 +6,7 @@ import java.sql.Date
 import java.text.SimpleDateFormat
 import java.text.DecimalFormat
 
-case class Lancamento(id : Long, formaPagamento : FormaPagamento, data : Date, items : Seq[Item]) {
+case class Lancamento(id : Long, formaPagamento : FormaPagamento, data : Date, atendente : String, items : Seq[Item]) {
   private val format = new SimpleDateFormat("HH:mm:ss")
   private val moneyFormat = new DecimalFormat("'R$ '0.00")
   def getItems = items.asJava
@@ -14,6 +14,7 @@ case class Lancamento(id : Long, formaPagamento : FormaPagamento, data : Date, i
   def getHora = format.format(data)
   def getId = id
   def getTotal = moneyFormat.format(items.map(i => i.valor * i.quantidade).sum)
+  def getAtendente = if ("" == atendente) "N&atilde;o Identificado" else atendente
 }
 
 case class Item(id : Long, lancamentoId : Long, produto : String, valor : BigDecimal, quantidade : Long) {

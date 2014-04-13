@@ -33,8 +33,8 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
   }
 
   @Post(Array("/novo"))
-  def postaNovo(formaPagamento : FormaPagamento, items : JList[PartialItem]) = {
-    lancamentos.add(formaPagamento, items.asScala.filterNot(_.empty))
+  def postaNovo(formaPagamento : FormaPagamento, atendente : String, items : JList[PartialItem]) = {
+    lancamentos.add(formaPagamento, atendente, items.asScala.filterNot(_.empty))
     result.redirectTo(classOf[Caixa]).novo
   }
 
