@@ -62,5 +62,5 @@ case class PartialItem(produto : String, valor : BigDecimal, quantidade : Long) 
 object Caixa {
   def sumOf(forma : FormaPagamento, lancamentos : Seq[Lancamento]) =
     lancamentos.filter(_.formaPagamento == forma).
-      map(_.items.map(_.valor).sum).sum
+      map(_.items.map(i => i.valor * i.quantidade).sum).sum
 }
