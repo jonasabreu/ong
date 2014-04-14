@@ -53,14 +53,14 @@ class Lancamentos {
   def meses = datasNoFormato("%Y-%m")
 
   private def datasNoFormato(formato : String) = onDatabase {
-    Q.queryNA[(String)](s"select distinct strftime('${formato}', createdAt) as data from lancamentos order by data desc").list
+    Q.queryNA[(String)](s"select distinct strftime('${formato}', datetime(createdAt, 'localtime')) as data from lancamentos order by data desc").list
   }
 
   def hoje = doDia(new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()))
 
   def doDia(date : String) : Seq[Lancamento] = onDatabase {
     val query =
-      Q.query[String, (Long, String, Date, String)](s"select * from lancamentos where date(createdAt) == ?")
+      Q.query[String, (Long, String, Date, String)](s"select id, formaPagamento, strftime('%Y-%m-%d %H:%M:%f', createdAt, 'localtime'), atendente from lancamentos where date(createdAt, 'localtime') == ?")
 
     query.list(date).reverse.map {
       case (id, formaPagamento, date, atendente) =>

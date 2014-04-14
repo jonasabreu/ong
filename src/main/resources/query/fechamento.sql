@@ -1,5 +1,5 @@
 select 
-    strftime("%d/%m/%Y", l.createdAt), 
+    strftime('%Y-%m', datetime(l.createdAt, 'localtime')), 
     i.produto, 
     i.quantidade,
     case when i.valor > 0 then
@@ -26,5 +26,5 @@ from lancamentos l
 join items i 
     on l.id = i.lancamento_id 
 where
-    strftime('%Y-%m', l.createdAt) = ?
+    strftime('%Y-%m', datetime(l.createdAt, 'localtime')) = ?
 order by l.createdAt;
