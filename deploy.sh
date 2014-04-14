@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 echo "================> Gerando war"
 sbt package
 
