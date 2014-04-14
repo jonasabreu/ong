@@ -12,6 +12,7 @@ import java.sql.Date
 import java.sql.Timestamp
 import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
 import java.text.SimpleDateFormat
+import scala.io.Source
 
 @Component
 @RequestScoped
@@ -24,31 +25,44 @@ class Lancamentos {
 
     Items.insertProj.insertAll(
       items.map {
-        case PartialItem(produto, valor, quantidade) => (None, id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor), quantidade)
+        case PartialItem(produto, valor, quantidade) =>
+          (None, id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor), quantidade)
       } : _*)
   }
+
+  def doMes(mes : String) = onDatabase {
+    Q.query[String, (String, String, String, String, String, String)](queryFor("fechamento")).
+      list(mes).
+      map {
+        case (a, b, c, d, e, f) => a :: b :: c :: d :: e :: f :: Nil
+      }
+  }
+
+  private def queryFor(id : String) : String =
+    Source.fromInputStream(classOf[Lancamentos].
+      getResourceAsStream(s"/query/${id}.sql")).
+      getLines.
+      mkString(" ")
 
   def remove(id : Long) = onDatabase {
     Lancamentos.where(_.id === id).delete
   }
 
-  def dias = onDatabase {
-    val query = for {
-      lancamento <- Lancamentos
-    } yield lancamento.createdAt
-    val formatter = new SimpleDateFormat("yyyy-MM-dd")
-    query.list.map { date =>
-      formatter.format(date)
-    }.sortWith(_ > _).distinct
+  def dias = datasNoFormato("%Y-%m-%d")
+
+  def meses = datasNoFormato("%Y-%m")
+
+  private def datasNoFormato(formato : String) = onDatabase {
+    Q.queryNA[(String)](s"select distinct strftime('${formato}', createdAt) as data from lancamentos order by data desc").list
   }
 
   def hoje = doDia(new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()))
 
   def doDia(date : String) : Seq[Lancamento] = onDatabase {
     val query =
-      Q.queryNA[(Long, String, Date, String)](s"select * from lancamentos where date(createdAt) == '${date}'")
+      Q.query[String, (Long, String, Date, String)](s"select * from lancamentos where date(createdAt) == ?")
 
-    query.list.reverse.map {
+    query.list(date).reverse.map {
       case (id, formaPagamento, date, atendente) =>
         val query = for {
           item <- Items if item.lancamentoId === id
@@ -69,7 +83,6 @@ object Lancamentos extends Table[(Long, String, Date, String)]("lancamentos") {
   def atendente = column[String]("atendente")
 
   def * = id ~ formaPagamento ~ createdAt ~ atendente
-  def items = Items.where(_.lancamentoId === id)
   def insertProj = id.? ~ formaPagamento ~ atendente returning id
 }
 

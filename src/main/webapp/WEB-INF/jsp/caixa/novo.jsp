@@ -1,13 +1,34 @@
-<!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html>
-<head>
-	<title></title>
-	<meta charset="utf-8"> 
-</head>
-	<link rel="stylesheet" href="/css/style.css" />
-<body>
-<a href="/antigos">Lan&ccedil;amentos Antigos</a> <br />
+
+<%@include file="/WEB-INF/fragments/start.jspf" %>
+
+<nav>
+<ul>
+<li id="lancamentos-antigos">
+Lan&ccedil;amentos Antigos: 
+<form>
+	<select name="">
+		<c:forEach var="dia" items="${dias}">
+			<option value="${dia}">${dia}</option>
+		</c:forEach>
+	</select>
+	<button>Ver</button>
+</form> 
+</li>
+<li id="fechamentos">
+Fechamentos: 
+<form>
+	<select name="">
+		<c:forEach var="mes" items="${meses}">
+			<option value="${mes}">${mes}</option>
+		</c:forEach>
+	</select>
+	<button>Ver</button>
+</form> 
+</li>
+</ul>
+</nav>
+
 <form id="compra" action="/novo" method="post">
 	<label>Atendente</label>
 	<input name="atendente" required /> <br>
@@ -37,8 +58,4 @@
 
 <%@include file="/WEB-INF/fragments/lancamentos.jspf" %>
 
-	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-	<script src="/js/underscore-min.js"></script>
-	<script src="/js/ong.js"></script>
-</body>
-</html>
+<%@include file="/WEB-INF/fragments/end.jspf" %>

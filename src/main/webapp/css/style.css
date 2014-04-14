@@ -31,3 +31,13 @@ input, label {
 	text-align: right;
 	display: inline-block;
 }
+
+nav li {
+	list-style: none;
+	display: inline-block;
+	margin-left: 30px;
+}
+
+nav ul {
+	padding: 0px;
+}

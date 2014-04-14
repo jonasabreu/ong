@@ -9,6 +9,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped
 import java.util.{ List => JList }
 import ong.FormaPagamento._
 import java.text.DecimalFormat
+import ong.vraptor.Csv
 
 @Resource
 class Caixa(result : Result, lancamentos : Lancamentos) {
@@ -19,6 +20,8 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
   def novo() = {
     val lancamentos = this.lancamentos.hoje
     result.include("campos", (0 until 15).asJava)
+    result.include("dias", this.lancamentos.dias.asJava)
+    result.include("meses", this.lancamentos.meses.asJava)
 
     adiciona(lancamentos)
   }
@@ -44,14 +47,14 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
     result.redirectTo(classOf[Caixa]).novo
   }
 
-  @Get(Array("/antigos"))
-  def lista = {
-    result.include("dias", lancamentos.dias.asJava)
-  }
-
   @Get(Array("/antigo/{dia}"))
   def antigo(dia : String) = {
     adiciona(lancamentos.doDia(dia))
+  }
+
+  @Get(Array("/fechamento/{mes}"))
+  def fechamento(mes : String) = {
+    result.use(classOf[Csv]).render(mes, lancamentos.doMes(mes))
   }
 }
 

@@ -1,3 +1,4 @@
+
 <ul class="total">
 	<li class="dinheiro">Total em Dinheiro: ${totalDinheiro}</li>
 	<li class="debito">Total em Debito: ${totalDebito}</li>
