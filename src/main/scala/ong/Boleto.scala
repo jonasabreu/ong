@@ -1,11 +1,13 @@
 package ong
 
 import java.util.GregorianCalendar
+
 import br.com.caelum.stella.boleto.{ Boleto => StellaBoleto, Datas, Emissor, Sacado }
 import br.com.caelum.stella.boleto.bancos.Bradesco
 import br.com.caelum.stella.boleto.transformer.GeradorDeBoleto
 import br.com.caelum.vraptor.{ Get, Resource, Result }
 import br.com.caelum.vraptor.ioc.{ Component, RequestScoped }
+import ong.vraptor.Binary
 
 @Resource
 @RequestScoped
@@ -27,6 +29,7 @@ class Boleto(result : Result) {
       .comAgencia("3349").comDigitoAgencia("9")
       .comContaCorrente("5800").comDigitoContaCorrente("9")
       .comEndereco("Pagável em qualquer agência bancária até o vencimento")
+      .comCarteira("25")
       .comNossoNumero("123123"); // eu que gero
 
     val sacado = Sacado.novoSacado()
@@ -43,6 +46,7 @@ class Boleto(result : Result) {
 
     val pdf = new GeradorDeBoleto(boleto).geraPDF
 
+    result.use(classOf[Binary]).pdf("boleto", pdf)
   }
 }
 
