@@ -76,6 +76,18 @@ class Lancamentos {
   }
 }
 
+@RequestScoped
+@Component
+class Items {
+  import Database._
+
+  def distinct = onDatabase {
+    Q.queryNA[(String, BigDecimal)](s"select distinct lower(produto), valor from items group by produto having count(produto) > 1 order by produto asc;").
+      list
+  }
+
+}
+
 object Lancamentos extends Table[(Long, String, Date, String)]("lancamentos") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def formaPagamento = column[String]("formaPagamento")

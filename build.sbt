@@ -2,6 +2,8 @@
 
 resolvers += "asdf" at "http://jasperreports.sourceforge.net/maven2"
 
+resolvers += Resolver.sonatypeRepo("snapshots")
+
 organization := "net.vidageek"
 
 name         := "ong"
@@ -22,7 +24,9 @@ libraryDependencies ++= Seq("junit" % "junit" % "4.10",
       						"org.eclipse.jetty" % "jetty-jsp-2.1" % "7.4.5.v20110725" % "container",
       						"org.mortbay.jetty" % "jsp-2.1-glassfish" % "2.1.v20100127" % "container",
       						"org.seleniumhq.selenium" % "selenium-firefox-driver" % "2.41.0",
-      						 "org.specs2" %% "specs2" % "2.3.11"
+      						 "org.specs2" %% "specs2" % "2.3.11",
+      						"org.scala-lang" %% "scala-pickling" % "0.8.0-SNAPSHOT",
+      						"org.scalamacros" %% "quasiquotes" % "2.0.0-M8"
 							)
 
 EclipseKeys.withSource := true
