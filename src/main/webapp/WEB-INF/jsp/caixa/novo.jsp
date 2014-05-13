@@ -28,7 +28,18 @@ Fechamentos:
 </li>
 </ul>
 </nav>
-
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8"> 
+</head>
+	<link rel="stylesheet" href="/css/style.css" />
+<body>
+<nav>
+	<h1>Ong</h1>
+	<a href="/antigos">Lan&ccedil;amentos Antigos</a> 
+</nav>
+<section class="novo">
 <form id="compra" action="/novo" method="post">
 	<label>Atendente</label>
 	<input name="atendente" required /> <br>
@@ -53,9 +64,14 @@ Fechamentos:
 		<option value="pagamentoOnline">Pagamento Online</option>
 		<option value="cheque">Cheque</option>
 	</select>
-	<input type="submit" />
+	<input class="salvar" type="submit" value="Salvar"/>
 </form> 
-
 <%@include file="/WEB-INF/fragments/lancamentos.jspf" %>
+</section>
 
 <%@include file="/WEB-INF/fragments/end.jspf" %>
+	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script src="/js/underscore-min.js"></script>
+	<script src="/js/ong.js"></script>
+</body>
+</html>
