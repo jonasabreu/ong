@@ -1,5 +1,5 @@
 select 
-    strftime('%Y-%m', datetime(l.createdAt, 'localtime')), 
+    strftime('%Y-%m-%d', datetime(l.createdAt, 'localtime')), 
     i.produto, 
     i.quantidade,
     case when i.valor > 0 then
