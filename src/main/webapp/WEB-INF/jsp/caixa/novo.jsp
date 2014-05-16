@@ -3,6 +3,7 @@
 <%@include file="/WEB-INF/fragments/start.jspf" %>
 
 <nav>
+	<h1>Ong</h1>
 <ul>
 <li id="lancamentos-antigos">
 Lan&ccedil;amentos Antigos: 
@@ -35,10 +36,6 @@ Fechamentos:
 </head>
 <link rel="stylesheet" href="/css/style.css" />
 <body>
-<nav>
-	<h1>Ong</h1>
-	<a href="/antigos">Lan&ccedil;amentos Antigos</a> 
-</nav>
 <section class="novo">
 	<form id="compra" action="/novo" method="post">
 		<label>Atendente</label>
