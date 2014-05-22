@@ -79,16 +79,19 @@ input, label {
 nav li {
 	list-style: none;
 	display: inline-block;
-	margin-left: 30px;
+	border-left: 1px solid black;
+	padding-left: 10px;
+	margin-right: 10px;	
 }
 
 nav ul {
 	padding: 0px;
 }
+
 nav {
 	height: 40px;
 	padding: 10px;
-	background-color: #354458;
+	background-color: #99cc99;
 	box-shadow: 0 2px 2px #4c4c4c;
 	margin-bottom: 10px;
 }
@@ -142,4 +145,6 @@ hr {
 #total{
 	text-align: right;
 }
+
+
 

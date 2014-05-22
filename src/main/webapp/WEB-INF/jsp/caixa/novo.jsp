@@ -3,7 +3,7 @@
 <%@include file="/WEB-INF/fragments/start.jspf" %>
 
 <nav>
-	<h1>Ong</h1>
+	<h1>Natureza em Forma</h1>
 <ul>
 <li id="lancamentos-antigos">
 Lan&ccedil;amentos Antigos: 
@@ -24,7 +24,7 @@ Fechamentos:
 			<option value="${mes}">${mes}</option>
 		</c:forEach>
 	</select>
-	<button>Ver</button>
+	<button>Baixar</button>
 </form> 
 </li>
 </ul>
@@ -38,8 +38,7 @@ Fechamentos:
 <body>
 <section class="novo">
 	<form id="compra" action="/novo" method="post">
-		<label>Atendente</label>
-		<input name="atendente" required /> <br>
+		<input placeholder="Atendente" name="atendente" required /> <br>
 		<hr />
 
 		<c:forEach var="i" items="${campos}">
