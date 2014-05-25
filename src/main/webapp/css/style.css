@@ -7,7 +7,7 @@
 }
 
 body {
-	background-color: #ececea;
+	background-color: #CFDBC5;
 }
 
 input {
@@ -79,7 +79,7 @@ input, label {
 nav li {
 	list-style: none;
 	display: inline-block;
-	border-left: 1px solid black;
+	border-left: 1px solid #fff;
 	padding-left: 10px;
 	margin-right: 10px;	
 }
@@ -91,7 +91,7 @@ nav ul {
 nav {
 	height: 40px;
 	padding: 10px;
-	background-color: #99cc99;
+	background-color: #2ecc71;
 	box-shadow: 0 2px 2px #4c4c4c;
 	margin-bottom: 10px;
 }
@@ -146,5 +146,10 @@ hr {
 	text-align: right;
 }
 
+#fechamentos p {
+	color:#fff;
+}
 
-
+#lancamentos-antigos p {
+	color: #fff;
+}

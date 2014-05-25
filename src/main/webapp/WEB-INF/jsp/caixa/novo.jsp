@@ -4,34 +4,34 @@
 
 <nav>
 	<h1>Natureza em Forma</h1>
-<ul>
-<li id="lancamentos-antigos">
-Lan&ccedil;amentos Antigos: 
-<form>
-	<select name="">
-		<c:forEach var="dia" items="${dias}">
-			<option value="${dia}">${dia}</option>
-		</c:forEach>
-	</select>
-	<button>Ver</button>
-</form> 
-</li>
-<li id="fechamentos">
-Fechamentos: 
-<form>
-	<select name="">
-		<c:forEach var="mes" items="${meses}">
-			<option value="${mes}">${mes}</option>
-		</c:forEach>
-	</select>
-	<button>Baixar</button>
-</form> 
-</li>
-</ul>
+	<ul>
+		<li id="lancamentos-antigos">
+		<p>Lan&ccedil;amentos Antigos</p>
+		<form>
+			<select name="">
+				<c:forEach var="dia" items="${dias}">
+				<option value="${dia}">${dia}</option>
+				</c:forEach>
+			</select>
+			<button>Ver</button>
+		</form> 
+		</li>
+		<li id="fechamentos">
+		<p>Fechamentos</p> 
+		<form>
+			<select name="">
+				<c:forEach var="mes" items="${meses}">
+				<option value="${mes}">${mes}</option>
+				</c:forEach>
+			</select>
+			<button>Baixar</button>
+		</form> 
+		</li>
+	</ul>
 </nav>
 <html>
 <head>
-<title></title>
+<title>Natureza em Forma</title>
 <meta charset="utf-8"> 
 </head>
 <link rel="stylesheet" href="/css/style.css" />
@@ -64,9 +64,9 @@ Fechamentos:
 </section>
 
 <%@include file="/WEB-INF/fragments/end.jspf" %>
-	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-	<script src="/js/underscore-min.js"></script>
-	<script src="/js/ong.js"></script>
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="/js/underscore-min.js"></script>
+<script src="/js/ong.js"></script>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="/js/underscore-min.js"></script>
 <script src="/js/ong.js"></script>
