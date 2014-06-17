@@ -11,14 +11,10 @@ import ong.vraptor.Binary
 
 @Resource
 @RequestScoped
-class Boleto(result : Result) {
+class Boleto(result : Result, number : BoletoNumber) {
 
   @Get(Array("/boleto"))
-  def boleto() = {
-  }
-
-  @Get(Array("/boleto2"))
-  def generate(vencimento : Vencimento) = {
+  def generate(vencimento : Vencimento, nome : String, valor : String) = {
     val datas = Datas.novasDatas()
       .comDocumento(new GregorianCalendar())
       .comProcessamento(new GregorianCalendar())
@@ -30,10 +26,10 @@ class Boleto(result : Result) {
       .comContaCorrente("5800").comDigitoContaCorrente("9")
       .comEndereco("Pagável em qualquer agência bancária até o vencimento")
       .comCarteira("25")
-      .comNossoNumero("123123"); // eu que gero
+      .comNossoNumero(number.next)
 
     val sacado = Sacado.novoSacado()
-      .comNome("Fulano da Silva")
+      .comNome(nome)
 
     val banco = new Bradesco();
 
@@ -42,7 +38,7 @@ class Boleto(result : Result) {
       .comDatas(datas)
       .comEmissor(emissor)
       .comSacado(sacado)
-      .comValorBoleto("5.00")
+      .comValorBoleto(valor)
 
     val pdf = new GeradorDeBoleto(boleto).geraPDF
 
