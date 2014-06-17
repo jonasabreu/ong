@@ -5,18 +5,19 @@ import br.com.caelum.vraptor.ioc.{ Component, RequestScoped }
 import br.com.caelum.vraptor.ioc.Component
 import br.com.caelum.vraptor.ioc.RequestScoped
 import br.com.caelum.vraptor.View
-import scala.pickling._
-import json._
 import java.util.zip.GZIPOutputStream
 import javax.servlet.http.HttpServletResponse
+import org.json4s._
+import org.json4s.native.Serialization
 
 @Resource
 @RequestScoped
 class Historico(items : Items, result : Result) {
+  implicit val formats = Serialization.formats(NoTypeHints)
 
   @Get(Array("/historico/produtos"))
   def produtos = {
-    result.use(classOf[Asset]).json(items.distinct.pickle.toString)
+    result.use(classOf[Asset]).json(Serialization.write(items.distinct))
   }
 }
 
@@ -24,7 +25,11 @@ class Historico(items : Items, result : Result) {
 @RequestScoped
 class Asset(response : HttpServletResponse) extends View {
   def json(json : String) {
-    val stream = new GZIPOutputStream(response.getOutputStream)
+    response.setContentType("application/json")
+    response.setHeader("Content-Encoding", "gzip")
 
+    val stream = new GZIPOutputStream(response.getOutputStream)
+    stream.write(json.getBytes())
+    stream.close
   }
 }

@@ -6,7 +6,6 @@ import br.com.caelum.stella.boleto.bancos.Bradesco
 import br.com.caelum.stella.boleto.transformer.GeradorDeBoleto
 import br.com.caelum.vraptor.{ Get, Resource, Result }
 import br.com.caelum.vraptor.ioc.{ Component, RequestScoped }
-import ong.vraptor.Binary
 
 @Resource
 @RequestScoped
@@ -44,7 +43,6 @@ class Boleto(result : Result) {
 
     val pdf = new GeradorDeBoleto(boleto).geraPDF
 
-    result.use(classOf[Binary]).pdf("boleto", pdf)
   }
 }
 
