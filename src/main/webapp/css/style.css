@@ -24,7 +24,8 @@ input {
 	margin-right: 2px;
 	padding: 8px 16px;
 	color: #fff;
-	border-radius: 4px
+	border-radius: 4px;
+    background-color: #357ebd;
 }
 
 input:invalid {
