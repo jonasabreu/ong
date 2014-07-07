@@ -47,6 +47,12 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
     result.redirectTo(classOf[Caixa]).novo
   }
 
+  @Post(Array("/mudaFormaPagamento"))
+  def mudaFormaPagamento(id : Long, formaPagamento : FormaPagamento) = {
+    lancamentos.muda(id, formaPagamento)
+    result.redirectTo("/")
+  }
+
   @Get(Array("/antigo/{dia}"))
   def antigo(dia : String) = {
     adiciona(lancamentos.doDia(dia))

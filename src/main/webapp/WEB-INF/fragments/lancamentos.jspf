@@ -11,7 +11,20 @@
 
 <ul>
 <c:forEach items="${lancamentos}" var="lancamento">
-<li class="lancamento ${lancamento.formaPagamento}">${lancamento.hora} - ${lancamento.total} em ${lancamento.formaPagamento.rep} por ${lancamento.atendente} <a href="/remove/${lancamento.id}">Remover</a>
+<li class="lancamento ${lancamento.formaPagamento}">${lancamento.hora} - ${lancamento.total} em 
+  
+  <select name="formaPagamento" data-id="${lancamento.id}">
+          <option value="dinheiro" <c:if test="${lancamento.formaPagamento.rep == 'Dinheiro'}">selected</c:if>>Dinheiro</option>
+			<option value="debito" <c:if test="${lancamento.formaPagamento.rep == 'Debito'}">selected</c:if>>Debito</option>
+			<option value="credito" <c:if test="${lancamento.formaPagamento.rep == 'Credito'}">selected</c:if>>Credito</option>
+			<option value="transferencia" <c:if test="${lancamento.formaPagamento.rep == 'Transferencia'}">selected</c:if>>Transferencia</option>
+			<option value="deposito" <c:if test="${lancamento.formaPagamento.rep == 'Deposito'}">selected</c:if>>Deposito</option>
+			<option value="pagamentoOnline" <c:if test="${lancamento.formaPagamento.rep == 'Pagamento Online'}">selected</c:if>>Pagamento Online</option>
+			<option value="cheque" <c:if test="${lancamento.formaPagamento.rep == 'Cheque'}">selected</c:if>>Cheque</option>
+		</select>
+  
+  
+  por ${lancamento.atendente} <a href="/remove/${lancamento.id}">Remover</a>
 	<ul class="items">
 	<c:forEach items="${lancamento.items}" var="item">
 		<li>${item.quantidade} x ${item.produto} - ${item.valor}</li>

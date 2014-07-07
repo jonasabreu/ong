@@ -18,6 +18,17 @@ function carregaFechamento(e) {
 	window.location = "/fechamento/" + mes;
 }
 
+function mudaFormaPagamento(e) {
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: "/mudaFormaPagamento",
+      data: {id: $(this).attr("data-id"), formaPagamento: this.value},
+      async: false
+    });
+    window.location.reload();
+}
+
 $(document).ready(function() {
 	
 	var inputs = $("#compra .valor");
@@ -26,4 +37,7 @@ $(document).ready(function() {
 	});
 	$("#lancamentos-antigos button").click(carregaLancamentos);
 	$("#fechamentos button").click(carregaFechamento);
+    $(".lancamento select").each(function(index, e) {
+      $(e).change(mudaFormaPagamento);
+    });
 });

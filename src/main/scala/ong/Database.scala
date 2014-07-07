@@ -48,6 +48,11 @@ class Lancamentos {
     Lancamentos.where(_.id === id).delete
   }
 
+  def muda(id : Long, formaPagamento : FormaPagamento) = onDatabase {
+    val q = for { l <- Lancamentos if l.id === id } yield l.formaPagamento
+    q.update(formaPagamento.toString)
+  }
+
   def dias = datasNoFormato("%Y-%m-%d")
 
   def meses = datasNoFormato("%Y-%m")
