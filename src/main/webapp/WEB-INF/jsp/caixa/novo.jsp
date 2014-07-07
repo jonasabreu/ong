@@ -64,11 +64,5 @@
 </section>
 
 <%@include file="/WEB-INF/fragments/end.jspf" %>
-<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="/js/underscore-min.js"></script>
-<script src="/js/ong.js"></script>
-<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="/js/underscore-min.js"></script>
-<script src="/js/ong.js"></script>
 </body>
 </html>

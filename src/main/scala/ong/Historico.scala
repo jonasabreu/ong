@@ -13,10 +13,10 @@ import org.json4s.native.Serialization
 @Resource
 @RequestScoped
 class Historico(items : Items, result : Result) {
-  implicit val formats = Serialization.formats(NoTypeHints)
 
   @Get(Array("/historico/produtos"))
   def produtos = {
+    implicit val formats = Serialization.formats(NoTypeHints)
     result.use(classOf[Asset]).json(Serialization.write(items.distinct))
   }
 }
