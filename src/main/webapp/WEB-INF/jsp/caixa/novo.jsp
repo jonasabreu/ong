@@ -50,7 +50,7 @@
 		<input name="total" id="total" value="0" /><br>
 		<select name="formaPagamento">
 			<option value="dinheiro">Dinheiro</option>
-			<option value="debito">Debito</option>
+			<option value="debito" selected>Debito</option>
 			<option value="credito">Credito</option>
 			<option value="transferencia">Transferencia</option>
 			<option value="deposito">Deposito</option>
