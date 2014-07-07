@@ -27,14 +27,6 @@ input {
 	border-radius: 4px
 }
 
-.credito {
-	background-color: #DFD;
-}
-
-.debito {
-	background-color: #DDF;
-}
-
 input:invalid {
 	box-shadow: 0 0 5px 1px red;
 }
@@ -153,3 +145,35 @@ hr {
 #lancamentos-antigos p {
 	color: #fff;
 }
+
+ul.total {
+    text-align: left;
+    margin: 30px;
+}
+
+ul.total li {
+    margin: 5px;
+}
+
+.lancamento {
+    text-align: left;
+    margin: 35px;
+    background-color: #F3F3F3;
+}
+
+li.lancamento a {
+    float: right;
+}
+
+ul.items {
+    padding-left: 30px;
+}
+
+.credito {
+	background-color: #DFD;
+}
+
+.debito {
+	background-color: #DDF;
+}
+

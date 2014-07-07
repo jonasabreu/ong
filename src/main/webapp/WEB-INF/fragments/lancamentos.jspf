@@ -11,8 +11,8 @@
 
 <ul>
 <c:forEach items="${lancamentos}" var="lancamento">
-<li class="lancamento ${lancamento.formaPagamento}">${lancamento.hora} - ${lancamento.total} em ${lancamento.formaPagamento.rep} por ${lancamento.atendente} - <a href="/remove/${lancamento.id}">Remover</a>
-	<ul>
+<li class="lancamento ${lancamento.formaPagamento}">${lancamento.hora} - ${lancamento.total} em ${lancamento.formaPagamento.rep} por ${lancamento.atendente} <a href="/remove/${lancamento.id}">Remover</a>
+	<ul class="items">
 	<c:forEach items="${lancamento.items}" var="item">
 		<li>${item.quantidade} x ${item.produto} - ${item.valor}</li>
 	</c:forEach>
