@@ -29,6 +29,7 @@ function mudaFormaPagamento(e) {
     window.location.reload();
 }
 
+
 $(document).ready(function() {
 	
 	var inputs = $("#compra .valor");
@@ -40,4 +41,37 @@ $(document).ready(function() {
     $(".lancamento select").each(function(index, e) {
       $(e).change(mudaFormaPagamento);
     });
+
+    var produtos = new Bloodhound({
+        datumTokenizer: function (d) {
+            return Bloodhound.tokenizers.whitespace(d.produto);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: autocompleteData
+    });
+    produtos.initialize();
+
+    $(".produto").each(function(index, e){
+
+        $(e).typeahead({
+            highlight: true
+        }, {
+            name: 'produto',
+            limit: 10,
+            displayKey: 'produto',
+            source: produtos.ttAdapter(),
+            templates: {
+              empty: '',
+              suggestion: function(e) { return '<p><strong>' + e.produto + '</strong> - R$ ' + e.valor + '</p>'}
+            }
+        });
+
+        var produtoSelectedHandler = function (eventObject, suggestionObject, suggestionDataset) {
+            $("input[name='items[" + index + "].valor']").val(suggestionObject.valor);
+        };
+
+        $(e).on('typeahead:selected', produtoSelectedHandler);
+    
+    });
+
 });

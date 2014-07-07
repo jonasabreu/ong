@@ -13,6 +13,7 @@ import java.sql.Timestamp
 import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
 import java.text.SimpleDateFormat
 import scala.io.Source
+import java.text.DecimalFormat
 
 @Component
 @RequestScoped
@@ -87,11 +88,16 @@ class Items {
   import Database._
 
   def distinct = onDatabase {
-    Q.queryNA[(String, BigDecimal)](s"select distinct lower(produto), valor from items group by produto having count(produto) > 1 order by produto asc;").
-      list
+    val format = new DecimalFormat("0.00")
+    Q.queryNA[(String, BigDecimal)](s"""select distinct lower(produto), valor from items group by produto having count(produto) > 1 order by produto asc;""").
+      list.map {
+        case (produto, valor) => JsonItem(produto, format.format(valor))
+      }
   }
 
 }
+
+case class JsonItem(produto : String, valor : String)
 
 object Lancamentos extends Table[(Long, String, Date, String)]("lancamentos") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)

@@ -17,7 +17,8 @@ class Historico(items : Items, result : Result) {
   @Get(Array("/historico/produtos"))
   def produtos = {
     implicit val formats = Serialization.formats(NoTypeHints)
-    result.use(classOf[Asset]).json(Serialization.write(items.distinct))
+    result.use(classOf[Asset]).json(s"var autocompleteData = ${Serialization.write(items.distinct)} ;")
+
   }
 }
 
