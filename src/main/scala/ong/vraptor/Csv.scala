@@ -16,7 +16,7 @@ class Csv(response : HttpServletResponse) extends View {
       cells.
         map(list =>
           list.
-            map(e => Option(e).map(_.replaceAll("[;,]", "")).getOrElse("")).
+            map(e => Option(e).map(_.replaceAll("[;]", "")).getOrElse("")).
             mkString(";")).
         mkString("\n"))
   }
