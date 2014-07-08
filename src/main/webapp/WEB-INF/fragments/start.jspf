@@ -4,5 +4,5 @@
 	<title></title>
 	<meta charset="utf-8"> 
 </head>
-	<link rel="stylesheet" href="/css/style.css?v=3" />
+<link rel="stylesheet" href="/css/style.css?v=${version}" />
 <body>

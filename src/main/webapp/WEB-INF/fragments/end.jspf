@@ -2,8 +2,8 @@
 	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="/js/underscore-min.js"></script>
     <script src="/js/typeahead.bundle.js"></script>
-    <script src="/historico/produtos"></script>
-	<script src="/js/ong.js?v=3"></script>
+    <script src="/historico/produtos?v=${version}"></script>
+    <script src="/js/ong.js?v=${version}"></script>
 
 </body>
 </html>
