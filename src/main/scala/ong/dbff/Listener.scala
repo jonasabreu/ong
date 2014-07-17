@@ -5,8 +5,8 @@ import javax.servlet.ServletContextEvent
 import java.util.Enumeration
 import scala.io.Source
 import scala.slick.driver.SQLiteDriver.simple._
-import scala.slick.session.Database
-import scala.slick.session.Database.threadLocalSession
+import scala.slick.jdbc.JdbcBackend.Database
+import scala.slick.jdbc.JdbcBackend.Database.dynamicSession
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.PreparedStatement

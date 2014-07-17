@@ -5,9 +5,9 @@ import scala.collection.JavaConverters._
 import br.com.caelum.vraptor.ioc.Component
 import br.com.caelum.vraptor.ioc.RequestScoped
 import scala.collection.mutable.ListBuffer
-import scala.slick.session.{ Database => SQDB }
+import scala.slick.jdbc.JdbcBackend.{ Database => SQDB }
 import scala.slick.driver.SQLiteDriver.simple._
-import scala.slick.session.Database.threadLocalSession
+import scala.slick.jdbc.JdbcBackend.Database.dynamicSession
 import java.sql.Date
 import java.sql.Timestamp
 import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
@@ -22,18 +22,20 @@ class Lancamentos {
   import Database._
 
   def add(formaPagamento : FormaPagamento, atendente : String, items : Seq[PartialItem]) = onDatabase {
-    val id = Lancamentos.insertProj.insert((None, formaPagamento.toString, atendente))
+    val lancamentos = TableQuery[LancamentosTable].map { l => (l.formaPagamento, l.atendente) }
+    val id = (lancamentos returning TableQuery[LancamentosTable].map(_.id)) += ((formaPagamento.toString, atendente))
 
-    Items.insertProj.insertAll(
+    TableQuery[ItemsTable].map { i => (i.lancamentoId, i.produto, i.valor, i.quantidade) }.insertAll(
       items.map {
         case PartialItem(produto, valor, quantidade) =>
-          (None, id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor), quantidade)
+          (id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor), quantidade)
       } : _*)
   }
 
   def doMes(mes : String) = onDatabase {
-    Q.query[String, (String, String, String, String, String, String)](queryFor("fechamento")).
-      list(mes).
+    val q = Q[String, (String, String, String, String, String, String)] + queryFor("fechamento")
+
+    q(mes).list.
       map {
         case (a, b, c, d, e, f) => a :: b :: c :: d :: e :: f :: Nil
       }
@@ -46,11 +48,11 @@ class Lancamentos {
       mkString(" ")
 
   def remove(id : Long) = onDatabase {
-    Lancamentos.where(_.id === id).delete
+    TableQuery[LancamentosTable].filter(_.id === id).delete
   }
 
   def muda(id : Long, formaPagamento : FormaPagamento) = onDatabase {
-    val q = for { l <- Lancamentos if l.id === id } yield l.formaPagamento
+    val q = for { l <- TableQuery[LancamentosTable] if l.id === id } yield l.formaPagamento
     q.update(formaPagamento.toString)
   }
 
@@ -66,12 +68,12 @@ class Lancamentos {
 
   def doDia(date : String) : Seq[Lancamento] = onDatabase {
     val query =
-      Q.query[String, (Long, String, Date, String)](s"select id, formaPagamento, strftime('%Y-%m-%d %H:%M:%f', createdAt, 'localtime'), atendente from lancamentos where date(createdAt, 'localtime') == ?")
+      Q[String, (Long, String, Date, String)] + s"select id, formaPagamento, strftime('%Y-%m-%d %H:%M:%f', createdAt, 'localtime'), atendente from lancamentos where date(createdAt, 'localtime') == ?"
 
-    query.list(date).reverse.map {
+    query(date).list.reverse.map {
       case (id, formaPagamento, date, atendente) =>
         val query = for {
-          item <- Items if item.lancamentoId === id
+          item <- TableQuery[ItemsTable] if item.lancamentoId === id
         } yield item.*
 
         val items = query.list.map { t =>
@@ -99,27 +101,26 @@ class Items {
 
 case class JsonItem(produto : String, valor : String)
 
-object Lancamentos extends Table[(Long, String, Date, String)]("lancamentos") {
+class LancamentosTable(tag : Tag) extends Table[(Long, String, Date, String)](tag, "lancamentos") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def formaPagamento = column[String]("formaPagamento")
   def createdAt = column[Date]("createdAt")
   def atendente = column[String]("atendente")
 
-  def * = id ~ formaPagamento ~ createdAt ~ atendente
-  def insertProj = id.? ~ formaPagamento ~ atendente returning id
+  def * = (id, formaPagamento, createdAt, atendente)
 }
 
-object Items extends Table[(Long, Long, String, BigDecimal, Long)]("items") {
+class ItemsTable(tag : Tag) extends Table[(Long, Long, String, BigDecimal, Long)](tag, "items") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def lancamentoId = column[Long]("lancamento_id")
   def produto = column[String]("produto")
   def valor = column[BigDecimal]("valor")
   def quantidade = column[Long]("quantidade")
 
-  def * = id ~ lancamentoId ~ produto ~ valor ~ quantidade
-  def insertProj = id.? ~ lancamentoId ~ produto ~ valor ~ quantidade
+  def * = (id, lancamentoId, produto, valor, quantidade)
+  def insertProj = (id.?, lancamentoId, produto, valor, quantidade)
 }
 
 object Database {
-  def onDatabase[T](f : => T) = SQDB.forURL("jdbc:sqlite:ong.db", driver = "org.sqlite.JDBC").withSession(f)
+  def onDatabase[T](f : => T) = SQDB.forURL("jdbc:sqlite:ong.db", driver = "org.sqlite.JDBC").withDynSession(f)
 }
