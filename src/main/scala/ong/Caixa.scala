@@ -10,29 +10,19 @@ import java.util.{ List => JList }
 import ong.FormaPagamento._
 import java.text.DecimalFormat
 import ong.vraptor.Csv
+import jaview.CachedJaview
+import javax.servlet.http.HttpServletResponse
+import jaview.CachedJaview
 
 @Resource
 class Caixa(result : Result, lancamentos : Lancamentos) {
 
-  import Caixa._
-
   @Get(Array("/"))
   def novo() = {
-    val lancamentos = this.lancamentos.hoje
-    result.include("campos", (0 until 15).asJava)
-    result.include("dias", this.lancamentos.dias.asJava)
-    result.include("meses", this.lancamentos.meses.asJava)
+    val l = lancamentos.hoje
 
-    adiciona(lancamentos)
-  }
-
-  private def adiciona(lancamentos : Seq[Lancamento]) = {
-    val format = new DecimalFormat("'R$ '0.00")
-
-    result.include("lancamentos", lancamentos.asJava)
-    FormaPagamento.values.foreach { forma =>
-      result.include(s"total${forma.toString.capitalize}", format.format(sumOf(forma, lancamentos)))
-    }
+    result.use(classOf[JaviewView])(_("/caixa/novo")
+      (new Totais(l), l, 0 until 15, lancamentos.dias, lancamentos.meses))
   }
 
   @Post(Array("/novo"))
@@ -55,7 +45,9 @@ class Caixa(result : Result, lancamentos : Lancamentos) {
 
   @Get(Array("/antigo/{dia}"))
   def antigo(dia : String) = {
-    adiciona(lancamentos.doDia(dia))
+    val l = lancamentos.doDia(dia)
+    result.use(classOf[JaviewView])(_("/caixa/antigo")
+      (new Totais(l), l, lancamentos.dias, lancamentos.meses))
   }
 
   @Get(Array("/fechamento/{mes}"))
@@ -68,8 +60,36 @@ case class PartialItem(produto : String, valor : BigDecimal, quantidade : Long) 
   def empty = produto == "" || valor == null
 }
 
-object Caixa {
-  def sumOf(forma : FormaPagamento, lancamentos : Seq[Lancamento]) =
-    lancamentos.filter(_.formaPagamento == forma).
-      map(_.items.map(i => i.valor * i.quantidade).sum).sum
+class Totais(lancamentos : Seq[Lancamento]) {
+
+  import ong.{ FormaPagamento => FP }
+
+  val format = new DecimalFormat("'R$ '0.00")
+
+  def dinheiro = sumOf(FP.dinheiro, lancamentos)
+  def credito = sumOf(FP.credito, lancamentos)
+  def debito = sumOf(FP.debito, lancamentos)
+  def transferencia = sumOf(FP.transferencia, lancamentos)
+  def deposito = sumOf(FP.deposito, lancamentos)
+  def cheque = sumOf(FP.cheque, lancamentos)
+  def pagamentoOnline = sumOf(FP.pagamentoOnline, lancamentos)
+
+  private def sumOf(forma : FormaPagamento, lancamentos : Seq[Lancamento]) =
+    format.format(lancamentos.filter(_.formaPagamento == forma).
+      map(_.items.map(i => i.valor * i.quantidade).sum).sum)
+}
+
+object Views {
+  val cache = new CachedJaview
+}
+
+@RequestScoped
+@Component
+class JaviewView(res : HttpServletResponse) extends View {
+
+  def apply(f : CachedJaview => String) = {
+    val html = f(Views.cache)
+    res.setContentType("text/html")
+    res.getOutputStream().print(html)
+  }
 }

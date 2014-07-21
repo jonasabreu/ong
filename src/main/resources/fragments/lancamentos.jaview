@@ -1,0 +1,41 @@
+view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento])
+
+<ul class="total">
+	<li class="dinheiro">Total em Dinheiro: @totais.dinheiro</li>
+	<li class="debito">Total em Debito: @totais.debito</li>
+	<li class="credito">Total em Credito: @totais.credito</li>
+	<li>Total em Transferencia: @totais.transferencia</li>
+	<li>Total em Deposito: @totais.deposito</li>
+	<li>Total em Pagamento Online: @totais.pagamentoOnline</li>
+	<li>Total em Cheque: @totais.cheque</li>
+</ul>
+
+<ul>
+
+@lancamentos -> lancamento {
+
+<li class="lancamento @lancamento.formaPagamento">@lancamento.hora - @lancamento.total em 
+  
+  <select name="formaPagamento" data-id="@lancamento.id">
+          <option value="dinheiro" @{ if (lancamento.formaPagamento.rep == "Dinheiro") "selected"}">Dinheiro</option>
+			<option value="debito" @{ if (lancamento.formaPagamento.rep == "Debito") "selected"}>Debito</option>
+			<option value="credito" @{ if (lancamento.formaPagamento.rep == "Credito") "selected"}>Credito</option>
+			<option value="transferencia" @{ if (lancamento.formaPagamento.rep == "Transferencia") "selected"}>Transferencia</option>
+			<option value="deposito" @{ if (lancamento.formaPagamento.rep == "Deposito") "selected"}>Deposito</option>
+			<option value="pagamentoOnline" @{ if (lancamento.formaPagamento.rep == "Pagamento Online") "selected"}>Pagamento Online</option>
+			<option value="cheque" @{ if (lancamento.formaPagamento.rep == "Cheque") "selected"}>Cheque</option>
+		</select>
+  
+  
+  por @lancamento.atendente <a href="/remove/@lancamento.id">Remover</a>
+	<ul class="items">
+	@lancamento.items -> item {
+		<li>@item.quantidade x @item.produto - @item.valorFormatado</li>
+	}
+	</ul>
+</li>
+
+} 
+
+</ul>
+</ul>

@@ -1,0 +1,32 @@
+view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento], campos:Seq[Int], dias:List[String], meses:List[String])
+
+@render("/fragments/start")(dias, meses)
+
+<section class="novo">
+	<form id="compra" action="/novo" method="post">
+		<input placeholder="Atendente" name="atendente" required /> <br>
+		<hr />
+
+		@campos -> i {
+		<input class="quantidade" placeholder="Quantidade" name="items[@i].quantidade" pattern="[0-9]+" title="Use apenas n&uacute;meros" value="1" />
+		<input class="produto" placeholder="Produto" name="items[@i].produto" /> 
+		<input class="valor" placeholder="Valor" name="items[@i].valor" pattern="[-0-9\.]*" title="Use apenas n&uacute;meros e '.'"/><br>
+		}
+		<p class="finalizar"><label for="total">Total: R$</label>
+		<input name="total" id="total" value="0" /><br>
+		<select name="formaPagamento">
+			<option value="dinheiro">Dinheiro</option>
+			<option value="debito" selected>Debito</option>
+			<option value="credito">Credito</option>
+			<option value="transferencia">Transferencia</option>
+			<option value="deposito">Deposito</option>
+			<option value="pagamentoOnline">Pagamento Online</option>
+			<option value="cheque">Cheque</option>
+		</select>
+		<input class="salvar" type="submit" value="Salvar"/>
+		</p>
+	</form> 
+	@render("/fragments/lancamentos")(totais, lancamentos)
+</section>
+
+@render("/fragments/end")()

@@ -1,0 +1,11 @@
+view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento], dias:List[String], meses:List[String])
+
+@render("/fragments/start")(dias, meses)
+
+<section class="novo">
+
+	@render("/fragments/lancamentos")(totais, lancamentos)
+
+</section>
+
+@render("/fragments/end")()

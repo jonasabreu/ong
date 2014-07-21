@@ -1,0 +1,37 @@
+view-type (dias:List[String], meses:List[String])
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8"> 
+</head>
+<link rel="stylesheet" href="/css/style.css?v=@{ong.vraptor.Version()}" />
+<body>
+
+<nav>
+	<h1>Natureza em Forma</h1>
+	<ul>
+		<li id="lancamentos-antigos">
+		<p>Lan&ccedil;amentos Antigos</p>
+		<form>
+			<select name="">
+				@dias -> dia {
+				<option value="@dia">@dia</option>
+				}
+			</select>
+			<button>Ver</button>
+		</form> 
+		</li>
+		<li id="fechamentos">
+		<p>Fechamentos</p> 
+		<form>
+			<select name="">
+				@meses -> mes {
+				<option value="@mes">@mes</option>
+				}
+			</select>
+			<button>Baixar</button>
+		</form> 
+		</li>
+	</ul>
+</nav>
