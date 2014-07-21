@@ -10,9 +10,8 @@ import java.util.{ List => JList }
 import ong.FormaPagamento._
 import java.text.DecimalFormat
 import ong.vraptor.Csv
-import jaview.CachedJaview
 import javax.servlet.http.HttpServletResponse
-import jaview.CachedJaview
+import net.vidageek.jaview.CachedJaview
 
 @Resource
 class Caixa(result : Result, lancamentos : Lancamentos) {
