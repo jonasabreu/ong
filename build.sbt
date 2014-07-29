@@ -20,8 +20,8 @@ libraryDependencies ++= Seq("junit" % "junit" % "4.10",
 							"com.typesafe.slick" %% "slick" % "2.1.0-M2",
 							"org.xerial" % "sqlite-jdbc" % "3.7.15-M1",
    						"org.json4s" %% "json4s-native" % "3.2.10",
-              "net.vidageek" %% "jaview-core" % "0.1",
-              "net.vidageek" %% "jaview-render" % "0.1",
+              "net.vidageek" %% "jaview-core" % "0.2",
+              "net.vidageek" %% "jaview-render" % "0.2",
 							"org.eclipse.jetty" % "jetty-webapp" % "7.4.5.v20110725" % "container",
    						"org.eclipse.jetty" % "jetty-servlets" % "7.4.5.v20110725" % "container",
    						"org.eclipse.jetty" % "jetty-jsp-2.1" % "7.4.5.v20110725" % "container",
@@ -30,11 +30,10 @@ libraryDependencies ++= Seq("junit" % "junit" % "4.10",
    						"org.specs2" %% "specs2" % "2.3.11" % "test"
 							)
 
-EclipseKeys.withSource := true
-
-EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Resource
 
 seq(webSettings :_*)
+
+seq(JaviewPlugin.javiewSettings :_*)
 
 ivyXML := <dependency org="org.eclipse.jetty.orbit" name="javax.servlet" rev="3.0.0.v201112011016"><artifact name="javax.servlet" type="orbit" ext="jar"/></dependency>
 
