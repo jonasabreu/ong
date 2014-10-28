@@ -14,7 +14,11 @@ view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento])
 
 @lancamentos -> lancamento {
 
-<li class="lancamento @lancamento.formaPagamento">@lancamento.hora - @lancamento.total em 
+<li class="lancamento @lancamento.formaPagamento">
+
+  <section class="detalhe">
+  
+  @lancamento.hora - @lancamento.total em 
   
   <select name="formaPagamento" data-id="@lancamento.id">
           <option value="dinheiro" @{ if (lancamento.formaPagamento.rep == "Dinheiro") "selected"}">Dinheiro</option>
@@ -27,12 +31,21 @@ view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento])
 		</select>
   
   
-  por @lancamento.atendente <a href="/remove/@lancamento.id">Remover</a>
+  por @lancamento.atendente 
+
+
 	<ul class="items">
 	@lancamento.items -> item {
 		<li>@item.quantidade x @item.produto - @item.valorFormatado</li>
 	}
 	</ul>
+	
+  </section>
+  <section class="botoes">
+	  @{ if (!lancamento.notaEmitida) s"""<a href="/emitir/${lancamento.id}">Emitir NFe</a>"""}
+	    
+	  <a href="/remove/@lancamento.id">Remover</a>
+  </section>	  
 </li>
 
 } 

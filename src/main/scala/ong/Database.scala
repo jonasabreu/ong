@@ -21,7 +21,7 @@ class Lancamentos {
 
   import Database._
 
-  def add(formaPagamento : FormaPagamento, atendente : String, items : Seq[PartialItem]) = onDatabase {
+  def add(formaPagamento: FormaPagamento, atendente: String, items: Seq[PartialItem]) = onDatabase {
     val lancamentos = TableQuery[LancamentosTable].map { l => (l.formaPagamento, l.atendente) }
     val id = (lancamentos returning TableQuery[LancamentosTable].map(_.id)) += ((formaPagamento.toString, atendente))
 
@@ -29,10 +29,10 @@ class Lancamentos {
       items.map {
         case PartialItem(produto, valor, quantidade) =>
           (id, produto, BigDecimal.javaBigDecimal2bigDecimal(valor), quantidade)
-      } : _*)
+      }: _*)
   }
 
-  def doMes(mes : String) = onDatabase {
+  def doMes(mes: String) = onDatabase {
     val q = Q[String, (String, String, String, String, String, String)] + queryFor("fechamento")
 
     q(mes).list.
@@ -41,17 +41,17 @@ class Lancamentos {
       }
   }
 
-  private def queryFor(id : String) : String =
+  private def queryFor(id: String): String =
     Source.fromInputStream(classOf[Lancamentos].
       getResourceAsStream(s"/query/${id}.sql")).
       getLines.
       mkString(" ")
 
-  def remove(id : Long) = onDatabase {
+  def remove(id: Long) = onDatabase {
     TableQuery[LancamentosTable].filter(_.id === id).delete
   }
 
-  def muda(id : Long, formaPagamento : FormaPagamento) = onDatabase {
+  def muda(id: Long, formaPagamento: FormaPagamento) = onDatabase {
     val q = for { l <- TableQuery[LancamentosTable] if l.id === id } yield l.formaPagamento
     q.update(formaPagamento.toString)
   }
@@ -60,18 +60,18 @@ class Lancamentos {
 
   def meses = datasNoFormato("%Y-%m")
 
-  private def datasNoFormato(formato : String) = onDatabase {
+  private def datasNoFormato(formato: String) = onDatabase {
     Q.queryNA[(String)](s"select distinct strftime('${formato}', datetime(createdAt, 'localtime')) as data from lancamentos order by data desc").list
   }
 
   def hoje = doDia(new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()))
 
-  def doDia(date : String) : Seq[Lancamento] = onDatabase {
+  def doDia(date: String): Seq[Lancamento] = onDatabase {
     val query =
-      Q[String, (Long, String, Date, String)] + s"select id, formaPagamento, strftime('%Y-%m-%d %H:%M:%f', createdAt, 'localtime'), atendente from lancamentos where date(createdAt, 'localtime') == ?"
+      Q[String, (Long, String, Date, String, Boolean)] + s"select id, formaPagamento, strftime('%Y-%m-%d %H:%M:%f', createdAt, 'localtime'), atendente, notaEmitida from lancamentos where date(createdAt, 'localtime') == ?"
 
     query(date).list.reverse.map {
-      case (id, formaPagamento, date, atendente) =>
+      case (id, formaPagamento, date, atendente, notaEmitida) =>
         val query = for {
           item <- TableQuery[ItemsTable] if item.lancamentoId === id
         } yield item.*
@@ -79,7 +79,7 @@ class Lancamentos {
         val items = query.list.map { t =>
           Item(t._1, t._2, t._3, t._4, t._5)
         }
-        Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, atendente, items)
+        Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, atendente, notaEmitida, items)
     }
   }
 }
@@ -99,18 +99,19 @@ class Items {
 
 }
 
-case class JsonItem(produto : String, valor : String)
+case class JsonItem(produto: String, valor: String)
 
-class LancamentosTable(tag : Tag) extends Table[(Long, String, Date, String)](tag, "lancamentos") {
+class LancamentosTable(tag: Tag) extends Table[(Long, String, Date, String, Boolean)](tag, "lancamentos") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def formaPagamento = column[String]("formaPagamento")
   def createdAt = column[Date]("createdAt")
   def atendente = column[String]("atendente")
+  def notaEmitida = column[Boolean]("notaEmitida")
 
-  def * = (id, formaPagamento, createdAt, atendente)
+  def * = (id, formaPagamento, createdAt, atendente, notaEmitida)
 }
 
-class ItemsTable(tag : Tag) extends Table[(Long, Long, String, BigDecimal, Long)](tag, "items") {
+class ItemsTable(tag: Tag) extends Table[(Long, Long, String, BigDecimal, Long)](tag, "items") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def lancamentoId = column[Long]("lancamento_id")
   def produto = column[String]("produto")
@@ -122,5 +123,5 @@ class ItemsTable(tag : Tag) extends Table[(Long, Long, String, BigDecimal, Long)
 }
 
 object Database {
-  def onDatabase[T](f : => T) = SQDB.forURL("jdbc:sqlite:ong.db", driver = "org.sqlite.JDBC").withDynSession(f)
+  def onDatabase[T](f: => T) = SQDB.forURL("jdbc:sqlite:ong.db", driver = "org.sqlite.JDBC").withDynSession(f)
 }

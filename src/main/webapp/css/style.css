@@ -162,10 +162,6 @@ ul.total li {
     background-color: #F3F3F3;
 }
 
-li.lancamento a {
-    float: right;
-}
-
 ul.items {
     padding-left: 30px;
 }
@@ -176,6 +172,22 @@ ul.items {
 
 .debito {
 	background-color: #DDF;
+}
+
+.lancamento .detalhe {
+    vertical-align: top;
+    width: 80%;
+    display: inline-block;
+}
+
+.lancamento .botoes {
+    width: 19%;
+    display: inline-block;
+    text-align: right;
+}
+
+.botoes a {
+    display: inline-block;
 }
 
 .tt-dropdown-menu {
