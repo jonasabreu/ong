@@ -2,7 +2,7 @@ view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento], campos:Seq[Int]
 
 @render("/fragments/start")(dias, meses)
 
-<section class="novo">
+
 	<form id="compra" action="/novo" method="post">
 		<input placeholder="Atendente" name="atendente" required /> <br>
 		<hr />
@@ -27,6 +27,5 @@ view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento], campos:Seq[Int]
 		</p>
 	</form> 
 	@render("/fragments/lancamentos")(totais, lancamentos)
-</section>
 
 @render("/fragments/end")()

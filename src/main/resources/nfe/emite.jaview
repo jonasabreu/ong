@@ -1,0 +1,7 @@
+view-type (lancamento: ong.Lancamento, dias:List[String], meses:List[String])
+
+@render("/fragments/start")(dias, meses)
+
+@lancamento
+
+@render("/fragments/end")()

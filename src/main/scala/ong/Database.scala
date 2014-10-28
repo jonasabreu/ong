@@ -51,6 +51,11 @@ class Lancamentos {
     TableQuery[LancamentosTable].filter(_.id === id).delete
   }
 
+  def doId(id: Long): Lancamento = onDatabase {
+    val q = for { l <- TableQuery[LancamentosTable] if l.id === id } yield l
+    q.list.map(tupleToLancamento).apply(0)
+  }
+
   def muda(id: Long, formaPagamento: FormaPagamento) = onDatabase {
     val q = for { l <- TableQuery[LancamentosTable] if l.id === id } yield l.formaPagamento
     q.update(formaPagamento.toString)
@@ -70,17 +75,19 @@ class Lancamentos {
     val query =
       Q[String, (Long, String, Date, String, Boolean)] + s"select id, formaPagamento, strftime('%Y-%m-%d %H:%M:%f', createdAt, 'localtime'), atendente, notaEmitida from lancamentos where date(createdAt, 'localtime') == ?"
 
-    query(date).list.reverse.map {
-      case (id, formaPagamento, date, atendente, notaEmitida) =>
-        val query = for {
-          item <- TableQuery[ItemsTable] if item.lancamentoId === id
-        } yield item.*
+    query(date).list.reverse.map(tupleToLancamento)
+  }
 
-        val items = query.list.map { t =>
-          Item(t._1, t._2, t._3, t._4, t._5)
-        }
-        Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, atendente, notaEmitida, items)
-    }
+  def tupleToLancamento(t: (Long, String, Date, String, Boolean)) = t match {
+    case (id, formaPagamento, date, atendente, notaEmitida) =>
+      val query = for {
+        item <- TableQuery[ItemsTable] if item.lancamentoId === id
+      } yield item.*
+
+      val items = query.list.map { t =>
+        Item(t._1, t._2, t._3, t._4, t._5)
+      }
+      Lancamento(id, FormaPagamento.valueOf(formaPagamento), date, atendente, notaEmitida, items)
   }
 }
 

@@ -42,7 +42,7 @@ view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento])
 	
   </section>
   <section class="botoes">
-	  @{ if (!lancamento.notaEmitida) s"""<a href="/emitir/${lancamento.id}">Emitir NFe</a>"""}
+	  @{ if (!lancamento.notaEmitida) s"""<a href="/emite/${lancamento.id}">Emitir NFe</a>"""}
 	    
 	  <a href="/remove/@lancamento.id">Remover</a>
   </section>	  
