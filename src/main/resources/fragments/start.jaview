@@ -12,7 +12,7 @@ view-type (dias:List[String], meses:List[String])
 	<h1>Natureza em Forma</h1>
 	<ul>
 		<li id="lancamentos-antigos">
-		<p>Lan&ccedil;amentos Antigos</p>
+		<p>Lan&ccedil;amentos</p>
 		<form>
 			<select name="">
 				@dias -> dia {
