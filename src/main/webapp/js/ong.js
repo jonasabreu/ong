@@ -34,7 +34,7 @@ $(document).ready(function() {
 	
 	var inputs = $("#compra .valor");
 	inputs.each(function(i, e){
-		$(e).blur(sumInputs);
+		$(e).change(sumInputs);
 	});
 	$("#lancamentos-antigos button").click(carregaLancamentos);
 	$("#fechamentos button").click(carregaFechamento);
@@ -67,7 +67,7 @@ $(document).ready(function() {
         });
 
         var produtoSelectedHandler = function (eventObject, suggestionObject, suggestionDataset) {
-            $("input[name='items[" + index + "].valor']").val(suggestionObject.valor);
+            $("input[name='items[" + index + "].valor']").val(suggestionObject.valor).change();
         };
 
         $(e).on('typeahead:selected', produtoSelectedHandler);
