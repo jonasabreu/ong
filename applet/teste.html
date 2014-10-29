@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Teste Applet</title></head>
+<body>
+
+	<object type="application/x-java-applet;version=1.6" id="pdfSigner" height="30px">
+		<param name="code" value="br.com.lambda3.applet.SignatureApplet" /> 
+		<param name="archive" value="pdf-signature-applet.jar" />
+		<param name="codebase_lookup" value="false"> 
+	</object>
+
+	<p>
+		<a href="#" onclick="console.log(pdfSigner.signPdfs('12', 'http://10.0.0.174:49339/Service1.svc'));">Assinar Pdfs</a>
+	<p>
+</body>
+</html>

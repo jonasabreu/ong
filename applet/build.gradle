@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        flatDir { 
+    		dirs 'lib' 
+		}
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
+        classpath ':proguard'
+    }
+}
+
+apply plugin: 'fatjar'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+	mavenCentral()
+}
+
+version = '1.0'
+
+
+fatJar {
+    manifest {
+        attributes( "Permissions": "all-permissions", 
+        			"Codebase": "http://localhost:3264", 
+        			"Application-Name": "Applet Assinatura")
+    }
+}
+
+dependencies {
+	compile files(fileTree(dir: 'lib', includes: ['*.jar'])) 
+}
+
+task proguard(type: proguard.gradle.ProGuardTask) {
+
+    // Specify the input jars, output jars, and library jars.
+
+    injars  'build/aux_dir/applet-assinatura-1.0.jar'
+    outjars 'build/aux_dir/pdf-signature-applet.jar'
+
+    libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+    libraryjars "${System.getProperty('java.home')}/lib/jce.jar"
+   	
+	dontwarn
+
+    keepattributes '*Annotation*'
+
+	keep 'class org.bouncycastle.jcajce.** {*;}'
+
+    keep 'public class * extends java.applet.Applet { \
+    	public <methods>; \
+    }'
+    
+    keepclasseswithmembernames 'class * { \
+        native <methods>; \
+    }'
+
+    keepclassmembers allowshrinking:true, 'enum * { \
+        public static **[] values(); \
+        public static ** valueOf(java.lang.String); \
+    }'
+}
