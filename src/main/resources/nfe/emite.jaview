@@ -2,6 +2,17 @@ view-type (lancamento: ong.Lancamento, dias:List[String], meses:List[String])
 
 @render("/fragments/start")(dias, meses)
 
+
+Escolha o certificado Digital:
+
+	<object type="application/x-java-applet;version=1.6" id="nfe" height="30px">
+		<param name="code" value="ong.applet.Nfe" /> 
+		<param name="archive" value="/applet-nfe.jar" />
+		<param name="codebase_lookup" value="false"> 
+	</object>
+
+
+
 @lancamento
 
 @render("/fragments/end")()
