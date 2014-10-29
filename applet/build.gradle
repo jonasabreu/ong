@@ -39,8 +39,8 @@ task proguard(type: proguard.gradle.ProGuardTask) {
 
     // Specify the input jars, output jars, and library jars.
 
-    injars  'build/aux_dir/applet-assinatura-1.0.jar'
-    outjars 'build/aux_dir/pdf-signature-applet.jar'
+    injars  'build/aux_dir/applet-1.0.jar'
+    outjars 'build/aux_dir/applet-nfe.jar'
 
     libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
     libraryjars "${System.getProperty('java.home')}/lib/jce.jar"
@@ -48,8 +48,6 @@ task proguard(type: proguard.gradle.ProGuardTask) {
 	dontwarn
 
     keepattributes '*Annotation*'
-
-	keep 'class org.bouncycastle.jcajce.** {*;}'
 
     keep 'public class * extends java.applet.Applet { \
     	public <methods>; \

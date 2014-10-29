@@ -1,7 +1,7 @@
 #! /bin/bash
 
-JAR=pdf-signature-applet.jar
-OLD_JAR=applet-assinatura-1.0.jar
+JAR=applet-nfe.jar
+OLD_JAR=applet-1.0.jar
 DIR=build/aux_dir
 
 gradle fatJar
@@ -30,4 +30,5 @@ echo "assinando jar"
 
 jarsigner -storepass "123456" -keypass "123456" -keystore keystore.jks $JAR selfsignedtest
 
-
+echo "Movendo jar para applicação web"
+mv $JAR ../src/main/webapp/.
