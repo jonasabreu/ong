@@ -20,15 +20,15 @@ view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento])
   
   @lancamento.hora - @lancamento.total em 
   
-  <select name="formaPagamento" data-id="@lancamento.id">
-          <option value="dinheiro" @{ if (lancamento.formaPagamento.rep == "Dinheiro") "selected"}">Dinheiro</option>
-			<option value="debito" @{ if (lancamento.formaPagamento.rep == "Debito") "selected"}>Debito</option>
-			<option value="credito" @{ if (lancamento.formaPagamento.rep == "Credito") "selected"}>Credito</option>
-			<option value="transferencia" @{ if (lancamento.formaPagamento.rep == "Transferencia") "selected"}>Transferencia</option>
-			<option value="deposito" @{ if (lancamento.formaPagamento.rep == "Deposito") "selected"}>Deposito</option>
-			<option value="pagamentoOnline" @{ if (lancamento.formaPagamento.rep == "Pagamento Online") "selected"}>Pagamento Online</option>
-			<option value="cheque" @{ if (lancamento.formaPagamento.rep == "Cheque") "selected"}>Cheque</option>
-		</select>
+	<select name="formaPagamento" data-id="@lancamento.id">
+		<option value="dinheiro" @{ if (lancamento.formaPagamento.rep == "Dinheiro") "selected"}">Dinheiro</option>
+		<option value="debito" @{ if (lancamento.formaPagamento.rep == "Debito") "selected"}>Debito</option>
+		<option value="credito" @{ if (lancamento.formaPagamento.rep == "Credito") "selected"}>Credito</option>
+		<option value="transferencia" @{ if (lancamento.formaPagamento.rep == "Transferencia") "selected"}>Transferencia</option>
+		<option value="deposito" @{ if (lancamento.formaPagamento.rep == "Deposito") "selected"}>Deposito</option>
+		<option value="pagamentoOnline" @{ if (lancamento.formaPagamento.rep == "Pagamento Online") "selected"}>Pagamento Online</option>
+		<option value="cheque" @{ if (lancamento.formaPagamento.rep == "Cheque") "selected"}>Cheque</option>
+	</select>
   
   
   por @lancamento.atendente 
@@ -50,5 +50,4 @@ view-type (totais:ong.Totais, lancamentos: List[ong.Lancamento])
 
 } 
 
-</ul>
 </ul>

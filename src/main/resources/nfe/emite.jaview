@@ -2,7 +2,7 @@ view-type (lancamento: ong.Lancamento, dias:List[String], meses:List[String])
 
 @render("/fragments/start")(dias, meses)
 
-<h2>Emiss&atilde;o de NFe para o lan&ccedil;amento de @lancamento.total em @lancamento.hora por @lancamento.atendente</h2>
+<h3>Emiss&atilde;o de NFe para o lan&ccedil;amento de @lancamento.total em @lancamento.hora por @lancamento.atendente</h3>
 
 <section class="certificate">
 	Escolha o Certificado Digital:
@@ -15,7 +15,7 @@ view-type (lancamento: ong.Lancamento, dias:List[String], meses:List[String])
 
 </section>
 
-<h2>Itens do Lan&ccedil;amento</h2>
+<h3>Itens do Lan&ccedil;amento</h3>
 
 <table>
 	<thead>
@@ -35,5 +35,9 @@ view-type (lancamento: ong.Lancamento, dias:List[String], meses:List[String])
 		</tr>
 	}
 </table>
+
+<h3>Dados da pessoa</h3>
+
+
 
 @render("/fragments/end")()

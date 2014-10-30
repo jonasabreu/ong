@@ -1,59 +1,22 @@
 package ong.applet;
 
-import java.security.AccessController;
-import java.security.KeyStore;
-import java.security.PrivilegedAction;
-import java.util.Collections;
+public class NfeXml {
 
-import javax.swing.JApplet;
-import javax.swing.JComboBox;
+	private final String nome;
+	private final String cpf;
+	private final String numero;
+	private final String logradouro;
 
-public class Nfe extends JApplet {
-
-	private static final String nfeEndpoint = "https://homologacao.nfe.fazenda.sp.gov.br/nfeweb/services/NfeRecepcao2.asmx";
-
-	private static final long serialVersionUID = 1L;
-	private final JComboBox<String> certificates;
-
-	private final KeyStore keyStore;
-
-	public Nfe() throws Exception {
-		try {
-			keyStore = KeyStore.getInstance("Windows-MY");
-			keyStore.load(null, null);
-
-			final String[] aliases = Collections.list(keyStore.aliases())
-					.toArray(new String[] {});
-
-			certificates = new JComboBox<String>(aliases);
-			if (aliases.length > 0)
-				certificates.setSelectedIndex(0);
-			add(certificates);
-		} catch (final Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+	public NfeXml(final String cpf, final String nome, final String logradouro,
+			final String numero) {
+		this.cpf = cpf;
+		this.nome = nome;
+		this.logradouro = logradouro;
+		this.numero = numero;
 	}
 
-	public String[] signPdfs() {
-		try {
-			return AccessController
-					.doPrivileged(new PrivilegedAction<String[]>() {
-
-						@Override
-						public String[] run() {
-							final String xml = geraXml();
-
-							return new String[] {};
-						}
-					});
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return new String[] { e.getCause().getMessage() };
-		}
-	}
-
-	private String geraXml() {
+	@Override
+	public String toString() {
 		final StringBuilder xml = new StringBuilder();
 		xml.append("<?xml version=\"1.0\" encoding=\"utf-16\"?> "
 				+ "<nfeRecepcao versao=\"2.00\" xmlns=\"http://www.portalfiscal.inf.br/nfe\">");
@@ -98,8 +61,12 @@ public class Nfe extends JApplet {
 				+ "        <CRT>3</CRT>                                                       "
 				+ "    </emit>                                                                "
 				+ "    <dest>                                                                 "
-				+ "        <CPF>33727395826</CPF>                                             "
-				+ "        <xNome>MARIA EUGENIA CARRETERO</xNome>                             "
+				+ "        <CPF>"
+				+ cpf
+				+ "</CPF>                                             "
+				+ "        <xNome>"
+				+ nome
+				+ "</xNome>                             "
 				+ "        <enderDest>                                                        "
 				+ "            <xLgr>Rua R ASSIS RIBEIRO</xLgr>                               "
 				+ "            <nro>2950</nro>                                                "
@@ -198,8 +165,10 @@ public class Nfe extends JApplet {
 				+ "    <KeyInfo>"
 				+ "        <X509Data>"
 				+ "            <X509Certificate>MIIIUDCCBjigAwIBAgIQF2AX5ZhOZYSbVG1ryFt1PDANBgkqhkiG9w0BAQsFADB0MQswCQYDVQQGEwJCUjETMBEGA1UEChMKSUNQLUJyYXNpbDEtMCsGA1UECxMkQ2VydGlzaWduIENlcnRpZmljYWRvcmEgRGlnaXRhbCBTLkEuMSEwHwYDVQQDExhBQyBDZXJ0aXNpZ24gTXVsdGlwbGEgRzUwHhcNMTQwMjI3MDAwMDAwWhcNMTcwMjI1MjM1OTU5WjCB1DELMAkGA1UEBhMCQlIxEzARBgNVBAoUCklDUC1CcmFzaWwxJzAlBgNVBAsUHkF1dGVudGljYWRvIHBvciAgQVIgVklMQSBWRUxIQTEbMBkGA1UECxQSQXNzaW5hdHVyYSBUaXBvIEEzMRUwEwYDVQQLFAxJRCAtIDU5NjMzMDAxJDAiBgNVBAMTG1BldCBDZW50cm8gQW5pbWFsIExUREEgLSBNRTEtMCsGCSqGSIb3DQEJARYeY29udGF0b0BuYXR1cmV6YWVtZm9ybWEub3JnLmJyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwqJNbDfLyn6n2w2twNCWe0CQK8oATgVDPur7YLZSr1hSOsqspWzZ55L09Rg6QCwpJvdQTKae3HEtt3ymToBbWyOER3Be4zsrgJqhku6Fu8VIN+l21RkEMog6zGHWShlLICx3XRZNm1jSNCtoEgKuMyEO0rTz7fSSsf35VepY/uTT1rXZtpmWWU0tjQ/iZGUPB4MbRQPHoDudGEVQ/wBeQHNNwgEkNHTx8JcnWvYv1GAMAfQlEHolKVEXSz0nz65AJlTdk6rp+4MpOiXp/tTrBRrtG3Jb1Mhwd1+WN+SBs8EUNx///vSlE5SAveb7miMXubH3q+/snF5UCItu0lfLIQIDAQABo4IDezCCA3cwgcEGA1UdEQSBuTCBtqA9BgVgTAEDBKA0BDIyNDA3MTk2NjA1NjAzOTM4ODExMDAwMDAwMDAwMDAwMDAwMDAwMTU1NjE0NzRzc3BTUKAhBgVgTAEDAqAYBBZNYW51ZWwgRmVybmFuZGV6IE90ZXJvoBkGBWBMAQMDoBAEDjY4NDU3MzA4MDAwMTAyoBcGBWBMAQMHoA4EDDAwMDAwMDAwMDAwMIEeY29udGF0b0BuYXR1cmV6YWVtZm9ybWEub3JnLmJyMAkGA1UdEwQCMAAwHwYDVR0jBBgwFoAUnVDPvf8kyq+xM+sX4kJ6jmkqjlMwDgYDVR0PAQH/BAQDAgXgMIGJBgNVHSAEgYEwfzB9BgZgTAECAwUwczBxBggrBgEFBQcCARZlaHR0cDovL2ljcC1icmFzaWwuY2VydGlzaWduLmNvbS5ici9yZXBvc2l0b3Jpby9kcGMvQUNfQ2VydGlzaWduX011bHRpcGxhL0RQQ19BQ19DZXJ0aVNpZ25NdWx0aXBsYS5wZGYwggElBgNVHR8EggEcMIIBGDBcoFqgWIZWaHR0cDovL2ljcC1icmFzaWwuY2VydGlzaWduLmNvbS5ici9yZXBvc2l0b3Jpby9sY3IvQUNDZXJ0aXNpZ25NdWx0aXBsYUc1L0xhdGVzdENSTC5jcmwwW6BZoFeGVWh0dHA6Ly9pY3AtYnJhc2lsLm91dHJhbGNyLmNvbS5ici9yZXBvc2l0b3Jpby9sY3IvQUNDZXJ0aXNpZ25NdWx0aXBsYUc1L0xhdGVzdENSTC5jcmwwW6BZoFeGVWh0dHA6Ly9yZXBvc2l0b3Jpby5pY3BicmFzaWwuZ292LmJyL2xjci9DZXJ0aXNpZ24vQUNDZXJ0aXNpZ25NdWx0aXBsYUc1L0xhdGVzdENSTC5jcmwwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMIGgBggrBgEFBQcBAQSBkzCBkDBkBggrBgEFBQcwAoZYaHR0cDovL2ljcC1icmFzaWwuY2VydGlzaWduLmNvbS5ici9yZXBvc2l0b3Jpby9jZXJ0aWZpY2Fkb3MvQUNfQ2VydGlzaWduX011bHRpcGxhX0c1LnA3YzAoBggrBgEFBQcwAYYcaHR0cDovL29jc3AuY2VydGlzaWduLmNvbS5icjANBgkqhkiG9w0BAQsFAAOCAgEALafbi6eCMze9/XxfD361/pL6X+JVxzik5Vb43qQedBAOMmKYGiHgNTcBbTNpUywLaUe1InspXkpL0SjxEVIb6H0aBza7m0gjhHQjDiokIGTQdv5agi03ES9IHlXUKv1gYRZ1VQXHHLPh7ujtgpL7APv2MPbCwL0rFwFwD/hnbyankLNzT/2Ats9rZZGW02//dL2ESt7nOMe4h8moz6rDrBazcZPEe3RwJVsYk5rUsAmjeWkl+l2Q5lxVJraNL8/HbX9Rll4z05POGo/BsYV5ljlti+62Dkt2/Wx55bUXOJxWAMmosSLl2MSVfZGxmg3ef6uYsEfWOcz5rqVhjmHxw8LRjnSnTqXe/iKYDFaJCTcWTkkRMGy7xWnSq08rcNYjKe512FbSmpK9PRJ+WqVPywQqbJA9z+49fmUcuLh+/exeFW0VL5EYAMgfOr0lBnrvt18MNMbjzQGCqdLNCVnbDPwxjnhijQw4YwWl+ynvseZcnJHNrvU9Sv4A0VQhbjgz5IEETknf6l2LVxJw35vmKqtfAa0uy0yOxXRyVRruKmzSVztjR+u/5jsSqN7vOz4VY2yWWc2O543g/NIYQuD+IbKcya2j3NQ+KB3LPIrTabVKl1ybeb46Xo5XcU2g6XPGpHwl+s/dS31PzqEqxmKFKFIg7/g1Voq+Oe4F+K8raSs=</X509Certificate>"
-				+ "        </X509Data>" + "    </KeyInfo>     "
+				+ "        </X509Data>"
+				+ "    </KeyInfo>     "
 				+ "</Signature>       " + "</NFe>" + "</nfeRecepcao>");
-		return null;
+		return xml.toString();
 	}
+
 }
