@@ -38,6 +38,12 @@ view-type (lancamento: ong.Lancamento, dias:List[String], meses:List[String])
 
 <h3>Dados da pessoa</h3>
 
+<label for="cpf">Cpf</label><input id="cpf">
+<label for="nome">Nome</label><input id="nome">
+<label for="logradouro">Logradouro</label><input id="logradouro">
+<label for="numero">N&uacute;mero</label><input id="numero">
+<label for="bairro">Bairro</label><input id="bairro">
+<label for="municipio">Munic&iacute;pio</label><input id="municipio">
 
 
 @render("/fragments/end")()
