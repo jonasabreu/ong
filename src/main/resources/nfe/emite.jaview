@@ -2,8 +2,10 @@ view-type (lancamento: ong.Lancamento, dias:List[String], meses:List[String])
 
 @render("/fragments/start")(dias, meses)
 
+<h2>Emiss&atilde;o de NFe para o lan&ccedil;amento de @lancamento.total em @lancamento.hora por @lancamento.atendente</h2>
 
-Escolha o certificado Digital:
+<section class="certificate">
+	Escolha o Certificado Digital:
 
 	<object type="application/x-java-applet;version=1.6" id="nfe" height="30px">
 		<param name="code" value="ong.applet.Nfe" /> 
@@ -11,8 +13,27 @@ Escolha o certificado Digital:
 		<param name="codebase_lookup" value="false"> 
 	</object>
 
+</section>
 
+<h2>Itens do Lan&ccedil;amento</h2>
 
-@lancamento
+<table>
+	<thead>
+		<tr>
+			<td>Quantidade</td>
+			<td>Item</td>
+			<td>Valor</td>
+			<td>C&oacute;digo do produto ou servi&ccedil;o</td>
+		</tr>
+	</thead>
+	@lancamento.items -> item {
+		<tr>
+			<td>@item.quantidade</td>		
+			<td>@item.produto</td>		
+			<td data-valor="@item.valor">@item.valorFormatado</td>		
+			<td><input type="text"></td>		
+		</tr>
+	}
+</table>
 
 @render("/fragments/end")()
