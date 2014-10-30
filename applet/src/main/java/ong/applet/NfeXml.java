@@ -6,13 +6,23 @@ public class NfeXml {
 	private final String cpf;
 	private final String numero;
 	private final String logradouro;
+	private final String bairro;
+	private final String codigoMunicipio;
+	private final String municipio;
+	private final String uf;
 
 	public NfeXml(final String cpf, final String nome, final String logradouro,
-			final String numero) {
+			final String numero, final String bairro,
+			final String codigoMunicipio, final String municipio,
+			final String uf) {
 		this.cpf = cpf;
 		this.nome = nome;
 		this.logradouro = logradouro;
 		this.numero = numero;
+		this.bairro = bairro;
+		this.codigoMunicipio = codigoMunicipio;
+		this.municipio = municipio;
+		this.uf = uf;
 	}
 
 	@Override
@@ -68,12 +78,24 @@ public class NfeXml {
 				+ nome
 				+ "</xNome>                             "
 				+ "        <enderDest>                                                        "
-				+ "            <xLgr>Rua R ASSIS RIBEIRO</xLgr>                               "
-				+ "            <nro>2950</nro>                                                "
-				+ "            <xBairro>centro</xBairro>                                      "
-				+ "            <cMun>3550308</cMun>                                           "
-				+ "            <xMun>Sao Paulo</xMun>                                         "
-				+ "            <UF>SP</UF>                                                    "
+				+ "            <xLgr>"
+				+ logradouro
+				+ "</xLgr>                               "
+				+ "            <nro>"
+				+ numero
+				+ "</nro>                                                "
+				+ "            <xBairro>"
+				+ bairro
+				+ "</xBairro>                                      "
+				+ "            <cMun>"
+				+ codigoMunicipio
+				+ "</cMun>                                           "
+				+ "            <xMun>"
+				+ municipio
+				+ "</xMun>                                         "
+				+ "            <UF>"
+				+ uf
+				+ "</UF>                                                    "
 				+ "            <cPais>1058</cPais>                                            "
 				+ "            <xPais>BRASIL</xPais>                                          "
 				+ "        </enderDest>                                                       "
